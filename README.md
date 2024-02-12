@@ -49,7 +49,7 @@ Running [cmd.sh](sim/search/simulations/cmd.sh) will output a file named `<exp-n
 
 Results will be available at `<outputPathPrefix>/all`. Each run will have its file in the format `all-<run-number>-*.csv`.
 
-For a simpler next simulation step, i.e., following the automated name resolution, these files should be placed in a folder named `<exp-name>`.
+For a simpler next simulation step, i.e., following the automated name resolution, these files should be placed in a folder named `<exp-name>` inside the `all` folder.
 
 ### II. Joint search+market simulation
 
