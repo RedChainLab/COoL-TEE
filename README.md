@@ -77,7 +77,7 @@ Similarly to before, the configurations without TEEs can be run by uncommenting 
 
 ### III. Figure regeneration
 
-The analysis folder contains 3 Python scripts, and their Jupyter notebooks equivalents, to regenerate figures presented in the paper.
+The [analysis](analysis) folder contains 3 Python scripts, and their Jupyter notebooks equivalents, to regenerate figures presented in the paper.
 
 #### A. Configuration
 
