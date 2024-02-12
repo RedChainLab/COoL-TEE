@@ -9,6 +9,7 @@ Hereafter are the requirements and step-by-step guide to replicate results prese
 - *Omnet++*: version 6.0.1 for Windows, available for download [here](https://omnetpp.org/download/old), was used to run experiments. It is also possible to use the version for other distributions, but provided automation scripts assume Windows as the operating system. See also the [Omnet++ installation guide](https://doc.omnetpp.org/omnetpp6/InstallGuide.pdf);
 - *WSL2* (Windows Subsystems for Linux): Omnet++ requires WSL to be set up. You can follow the [Omnet++ installation guide](https://doc.omnetpp.org/omnetpp6/InstallGuide.pdf) to set up WSL;
 - *Python3*: required modules are provided in *[requirements.txt](./requirements.txt)* (installable using: `pip install -r requirements.txt`);
+- *Jupyter* (optional): Jupyter notebooks are available for figure generation, but they are also available in Python script form.
 - *Disk space*: Around 400GB of storage space are sufficient to hold all experiment data, across all presented system configurations. Around 2.2GB of space for single configurations with 500 runs, 1.3GB for those with 100 runs, should system contraints require running experiments in smaller batches;
 
 ## Experiment replication
