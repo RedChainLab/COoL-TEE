@@ -736,6 +736,6 @@ if __name__ == "__main__":
             full_dfs=pd.read_csv(f"{OUTPUT_DIR}/{str_desc}.csv", usecols=cols, index_col=idx_cols, low_memory=True)
             print(f"Loaded data from {OUTPUT_DIR}/{str_desc}.csv")
 
-        plot_data(full_dfs, str_desc)
+        #plot_data(full_dfs, str_desc)
         plt.close('all')
     #plt.show()
