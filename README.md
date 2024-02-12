@@ -65,11 +65,20 @@ To use the provided market events for full-replication of the paper's results, `
 
 #### B. Experiment-level Configuration
 
-To generate the PlanetLab-based results, the [race_winners.py](sim/market/race_winners.py) can be run as-is for TEE-based configurations. To run the special case where no TEEs are used, line 559 should be uncommented, i.e., the list item `"noTEE"` in the list `EXP_SPECS`.
+To generate the PlanetLab-based results, the [race_winners.py](sim/market/race_winners.py) can be run as-is for TEE-based configurations. To run the special case where no TEEs are used, line 559 should be uncommented, i.e., the list item `"noTEE"` in the list `EXP_SPECS` (see code block below).
 
 To generate the same-datacenter results, because the result folders and configuration files are different, `EXP_DIR` and `CONFIG_FILENAME` (lines 554-556) should be set to "wait100noLatByzRho100" and "config_8SP_wait100noLatByzRho100" respectively (available in commented form at the relevant lines). 
 Additionally, for name-resolution purposes in the analysis phase, the list item `"sameDC"` in `EXP_SPECS` should be uncommented (line 561).
 Similarly to before, the configurations without TEEs can be run by uncommenting the `"noTEE"` list item.
+
+```python  
+    EXP_SPECS=[
+        #"noTEE",
+        "WtA",#Winner takes all (assets)
+        #"sameDC",
+        f"+{TIME_OFFSET}s"
+    ]
+```
 
 #### C. Obtained results
 
