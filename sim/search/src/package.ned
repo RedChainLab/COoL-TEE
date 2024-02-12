@@ -1,0 +1,3 @@
+package cooltee;
+
+@license(LGPL);
