@@ -23,7 +23,7 @@
 
 class PoTFifo: public AggFifo {
 public:
-    std::map<PoTMsg*, int> potRQqueueLen;
+    std::map<int /**ID**/, std::pair<PoTMsg*, int>> potRQqueueLen;
 public:
     virtual ~PoTFifo();
     void handleMessage(cMessage*) override;

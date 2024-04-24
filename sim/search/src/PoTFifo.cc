@@ -30,8 +30,15 @@ void PoTFifo::handleMessage(cMessage* msg)
     if (msg->arrivedOn("prov$i"))
     {
         // Check map and if msg->len < self RQ len, remove request
-
-        delete msg;
+        LenMsg* lmsg=check_and_cast<LenMsg *>(msg);
+        int twinLen = lmsg->getLen();
+        if(potRQqueueLen.find(lmsg->getID())!=potRQqueueLen.end() && twinLen<potRQqueueLen[lmsg->getID()].second)
+        {
+            PoTMsg* rqMsg=potRQqueueLen[lmsg->getID()].first;
+            queue.remove(rqMsg);
+            // handle unserved RQ msg destruction
+        }
+        delete lmsg;
     }
     else if (msg == endServiceMsg) { // When a message has been served
         endService(msgServiced);
@@ -73,6 +80,7 @@ void PoTFifo::handleMessage(cMessage* msg)
         LenMsg* lenMsg = new LenMsg;
         lenMsg->setID(sMsg->getID());
         lenMsg->setLen(queue.getLength());
+        potRQqueueLen[sMsg->getID()]=std::pair<PoTMsg*, int>(sMsg, queue.getLength());
         send(lenMsg,"prov$o",twinProv);
     }
 }
