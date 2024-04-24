@@ -23,14 +23,14 @@ class DeadlineMsg;
  * //
  * // TODO generated message class
  * //
- * packet DeadlineMsg
+ * message DeadlineMsg
  * {
  *     int ID;
  *     int provider;
  * }
  * </pre>
  */
-class DeadlineMsg : public ::omnetpp::cPacket
+class DeadlineMsg : public ::omnetpp::cMessage
 {
   protected:
     int ID = 0;

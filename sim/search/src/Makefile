@@ -45,16 +45,23 @@ OBJS = \
     $O/LOolSource.o \
     $O/MultiSink.o \
     $O/MultiSource.o \
+    $O/PoTFifo.o \
+    $O/PoTSink.o \
+    $O/PoTSource.o \
     $O/Sink.o \
     $O/Source.o \
     $O/utils/utils.o \
     $O/DeadlineMsg_m.o \
+    $O/LenMsg_m.o \
+    $O/PoTMsg_m.o \
     $O/SourcedMsg_m.o \
     $O/Vector_m.o
 
 # Message files
 MSGFILES = \
     DeadlineMsg.msg \
+    LenMsg.msg \
+    PoTMsg.msg \
     SourcedMsg.msg \
     Vector.msg
 

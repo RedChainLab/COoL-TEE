@@ -152,11 +152,11 @@ void doParsimUnpacking(omnetpp::cCommBuffer *, T& t)
 
 Register_Class(SourcedMsg)
 
-SourcedMsg::SourcedMsg(const char *name, short kind) : ::omnetpp::cPacket(name, kind)
+SourcedMsg::SourcedMsg(const char *name, short kind) : ::omnetpp::cMessage(name, kind)
 {
 }
 
-SourcedMsg::SourcedMsg(const SourcedMsg& other) : ::omnetpp::cPacket(other)
+SourcedMsg::SourcedMsg(const SourcedMsg& other) : ::omnetpp::cMessage(other)
 {
     copy(other);
 }
@@ -168,7 +168,7 @@ SourcedMsg::~SourcedMsg()
 SourcedMsg& SourcedMsg::operator=(const SourcedMsg& other)
 {
     if (this == &other) return *this;
-    ::omnetpp::cPacket::operator=(other);
+    ::omnetpp::cMessage::operator=(other);
     copy(other);
     return *this;
 }
@@ -187,7 +187,7 @@ void SourcedMsg::copy(const SourcedMsg& other)
 
 void SourcedMsg::parsimPack(omnetpp::cCommBuffer *b) const
 {
-    ::omnetpp::cPacket::parsimPack(b);
+    ::omnetpp::cMessage::parsimPack(b);
     doParsimPacking(b,this->source);
     doParsimPacking(b,this->ID);
     doParsimPacking(b,this->time_send);
@@ -200,7 +200,7 @@ void SourcedMsg::parsimPack(omnetpp::cCommBuffer *b) const
 
 void SourcedMsg::parsimUnpack(omnetpp::cCommBuffer *b)
 {
-    ::omnetpp::cPacket::parsimUnpack(b);
+    ::omnetpp::cMessage::parsimUnpack(b);
     doParsimUnpacking(b,this->source);
     doParsimUnpacking(b,this->ID);
     doParsimUnpacking(b,this->time_send);
@@ -335,7 +335,7 @@ class SourcedMsgDescriptor : public omnetpp::cClassDescriptor
 
 Register_ClassDescriptor(SourcedMsgDescriptor)
 
-SourcedMsgDescriptor::SourcedMsgDescriptor() : omnetpp::cClassDescriptor(omnetpp::opp_typename(typeid(SourcedMsg)), "omnetpp::cPacket")
+SourcedMsgDescriptor::SourcedMsgDescriptor() : omnetpp::cClassDescriptor(omnetpp::opp_typename(typeid(SourcedMsg)), "omnetpp::cMessage")
 {
     propertyNames = nullptr;
 }

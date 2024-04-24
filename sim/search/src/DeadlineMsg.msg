@@ -16,7 +16,7 @@
 //
 // TODO generated message class
 //
-packet DeadlineMsg {
+message DeadlineMsg {
     int ID;
     int provider;
 }

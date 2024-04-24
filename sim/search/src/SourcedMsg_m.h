@@ -23,7 +23,7 @@ class SourcedMsg;
  * //
  * // TODO generated message class
  * //
- * packet SourcedMsg
+ * message SourcedMsg
  * {
  *     int source;
  *     int ID;
@@ -36,7 +36,7 @@ class SourcedMsg;
  * }
  * </pre>
  */
-class SourcedMsg : public ::omnetpp::cPacket
+class SourcedMsg : public ::omnetpp::cMessage
 {
   protected:
     int source = 0;
