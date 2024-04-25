@@ -17,6 +17,7 @@
 // TODO generated message class
 //
 packet LenMsg {
+    int source;
     int ID;
     int len;
 }

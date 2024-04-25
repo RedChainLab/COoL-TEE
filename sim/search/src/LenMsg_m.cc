@@ -175,6 +175,7 @@ LenMsg& LenMsg::operator=(const LenMsg& other)
 
 void LenMsg::copy(const LenMsg& other)
 {
+    this->source = other.source;
     this->ID = other.ID;
     this->len = other.len;
 }
@@ -182,6 +183,7 @@ void LenMsg::copy(const LenMsg& other)
 void LenMsg::parsimPack(omnetpp::cCommBuffer *b) const
 {
     ::omnetpp::cPacket::parsimPack(b);
+    doParsimPacking(b,this->source);
     doParsimPacking(b,this->ID);
     doParsimPacking(b,this->len);
 }
@@ -189,8 +191,19 @@ void LenMsg::parsimPack(omnetpp::cCommBuffer *b) const
 void LenMsg::parsimUnpack(omnetpp::cCommBuffer *b)
 {
     ::omnetpp::cPacket::parsimUnpack(b);
+    doParsimUnpacking(b,this->source);
     doParsimUnpacking(b,this->ID);
     doParsimUnpacking(b,this->len);
+}
+
+int LenMsg::getSource() const
+{
+    return this->source;
+}
+
+void LenMsg::setSource(int source)
+{
+    this->source = source;
 }
 
 int LenMsg::getID() const
@@ -218,6 +231,7 @@ class LenMsgDescriptor : public omnetpp::cClassDescriptor
   private:
     mutable const char **propertyNames;
     enum FieldConstants {
+        FIELD_source,
         FIELD_ID,
         FIELD_len,
     };
@@ -286,7 +300,7 @@ const char *LenMsgDescriptor::getProperty(const char *propertyName) const
 int LenMsgDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
-    return base ? 2+base->getFieldCount() : 2;
+    return base ? 3+base->getFieldCount() : 3;
 }
 
 unsigned int LenMsgDescriptor::getFieldTypeFlags(int field) const
@@ -298,10 +312,11 @@ unsigned int LenMsgDescriptor::getFieldTypeFlags(int field) const
         field -= base->getFieldCount();
     }
     static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,    // FIELD_source
         FD_ISEDITABLE,    // FIELD_ID
         FD_ISEDITABLE,    // FIELD_len
     };
-    return (field >= 0 && field < 2) ? fieldTypeFlags[field] : 0;
+    return (field >= 0 && field < 3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LenMsgDescriptor::getFieldName(int field) const
@@ -313,18 +328,20 @@ const char *LenMsgDescriptor::getFieldName(int field) const
         field -= base->getFieldCount();
     }
     static const char *fieldNames[] = {
+        "source",
         "ID",
         "len",
     };
-    return (field >= 0 && field < 2) ? fieldNames[field] : nullptr;
+    return (field >= 0 && field < 3) ? fieldNames[field] : nullptr;
 }
 
 int LenMsgDescriptor::findField(const char *fieldName) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     int baseIndex = base ? base->getFieldCount() : 0;
-    if (strcmp(fieldName, "ID") == 0) return baseIndex + 0;
-    if (strcmp(fieldName, "len") == 0) return baseIndex + 1;
+    if (strcmp(fieldName, "source") == 0) return baseIndex + 0;
+    if (strcmp(fieldName, "ID") == 0) return baseIndex + 1;
+    if (strcmp(fieldName, "len") == 0) return baseIndex + 2;
     return base ? base->findField(fieldName) : -1;
 }
 
@@ -337,10 +354,11 @@ const char *LenMsgDescriptor::getFieldTypeString(int field) const
         field -= base->getFieldCount();
     }
     static const char *fieldTypeStrings[] = {
+        "int",    // FIELD_source
         "int",    // FIELD_ID
         "int",    // FIELD_len
     };
-    return (field >= 0 && field < 2) ? fieldTypeStrings[field] : nullptr;
+    return (field >= 0 && field < 3) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **LenMsgDescriptor::getFieldPropertyNames(int field) const
@@ -423,6 +441,7 @@ std::string LenMsgDescriptor::getFieldValueAsString(omnetpp::any_ptr object, int
     }
     LenMsg *pp = omnetpp::fromAnyPtr<LenMsg>(object); (void)pp;
     switch (field) {
+        case FIELD_source: return long2string(pp->getSource());
         case FIELD_ID: return long2string(pp->getID());
         case FIELD_len: return long2string(pp->getLen());
         default: return "";
@@ -441,6 +460,7 @@ void LenMsgDescriptor::setFieldValueAsString(omnetpp::any_ptr object, int field,
     }
     LenMsg *pp = omnetpp::fromAnyPtr<LenMsg>(object); (void)pp;
     switch (field) {
+        case FIELD_source: pp->setSource(string2long(value)); break;
         case FIELD_ID: pp->setID(string2long(value)); break;
         case FIELD_len: pp->setLen(string2long(value)); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'LenMsg'", field);
@@ -457,6 +477,7 @@ omnetpp::cValue LenMsgDescriptor::getFieldValue(omnetpp::any_ptr object, int fie
     }
     LenMsg *pp = omnetpp::fromAnyPtr<LenMsg>(object); (void)pp;
     switch (field) {
+        case FIELD_source: return pp->getSource();
         case FIELD_ID: return pp->getID();
         case FIELD_len: return pp->getLen();
         default: throw omnetpp::cRuntimeError("Cannot return field %d of class 'LenMsg' as cValue -- field index out of range?", field);
@@ -475,6 +496,7 @@ void LenMsgDescriptor::setFieldValue(omnetpp::any_ptr object, int field, int i, 
     }
     LenMsg *pp = omnetpp::fromAnyPtr<LenMsg>(object); (void)pp;
     switch (field) {
+        case FIELD_source: pp->setSource(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_ID: pp->setID(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_len: pp->setLen(omnetpp::checked_int_cast<int>(value.intValue())); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'LenMsg'", field);

@@ -62,7 +62,7 @@ void PoTSource::handleMessage(cMessage *msg)
 
             PoTMsg *job = new PoTMsg("job");
             job->setSource(this->getIndex()+this->par("idx_offset").intValue());
-            job->setID(sink->totalRequests);
+            job->setID(sink->totalRequests+job->getSource()*100000);
             for(int otherProvider:chosenProviders)
             {
                 if(otherProvider!=chosenProvider)

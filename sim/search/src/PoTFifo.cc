@@ -22,6 +22,11 @@ PoTFifo::~PoTFifo() {
     potRQqueueLen.clear();
 }
 
+bool resolveConflict(int self, int twin)
+{
+    return (((self%2)==(twin%2)) && (self < twin)) || (((self%2)!=(twin%2)) && (self > twin));
+}
+
 void PoTFifo::handleMessage(cMessage* msg)
 {
     if(par("dropWaittime").doubleValueInUnit("s")>0){
@@ -32,11 +37,30 @@ void PoTFifo::handleMessage(cMessage* msg)
         // Check map and if msg->len < self RQ len, remove request
         LenMsg* lmsg=check_and_cast<LenMsg *>(msg);
         int twinLen = lmsg->getLen();
-        if(potRQqueueLen.find(lmsg->getID())!=potRQqueueLen.end() && twinLen<potRQqueueLen[lmsg->getID()].second)
+        EV << "RQ ID " << lmsg->getID()<<std::endl;
+        EV << "TwinLen " << twinLen << std::endl;
+        EV << "Found | ownlen "<<(potRQqueueLen.find(lmsg->getID())!=potRQqueueLen.end()) << " " << ((potRQqueueLen.find(lmsg->getID())!=potRQqueueLen.end())?potRQqueueLen[lmsg->getID()].second:-1) << std::endl;
+        EV << "Conflict "<< ((potRQqueueLen.find(lmsg->getID())!=potRQqueueLen.end())?resolveConflict(lmsg->getSource(),this->getIndex()+par("offset").intValue()):-1) << std::endl;
+        EV << "IDs " << lmsg->getSource() << " " << this->getIndex()+par("offset").intValue() << std::endl;
+        if(potRQqueueLen.find(lmsg->getID())!=potRQqueueLen.end())
         {
-            PoTMsg* rqMsg=potRQqueueLen[lmsg->getID()].first;
-            queue.remove(rqMsg);
-            // handle unserved RQ msg destruction
+            if(
+                  (twinLen<potRQqueueLen[lmsg->getID()].second)
+                  ||
+                  (twinLen==potRQqueueLen[lmsg->getID()].second && resolveConflict(lmsg->getSource(),this->getIndex()+par("offset").intValue()))
+              )
+            {
+                PoTMsg* rqMsg=potRQqueueLen[lmsg->getID()].first;
+                EV << "Bef " << queue.getLength() << std::endl;
+                queue.remove(rqMsg);
+                EV << "Aft " << queue.getLength() << std::endl;
+                // handle unserved RQ msg destruction
+            }
+        }
+        else
+        {
+            EV << "Writing twinLen " <<twinLen<<std::endl;
+            potRQTwinQueueLen[lmsg->getID()]=twinLen;
         }
         delete lmsg;
     }
@@ -58,30 +82,53 @@ void PoTFifo::handleMessage(cMessage* msg)
     }
     else
     {
-        if (!msgServiced) { // If the queue is empty, serve the new mesage directly
-            arrival(msg);
-            msgServiced = msg;
-            emit(queueingTimeSignal, SIMTIME_ZERO);
-            simtime_t serviceTime = startService(msgServiced);
-            scheduleAt(simTime()+serviceTime, endServiceMsg);
-
-            emit(busySignal, true);
-        }
-        else { // If the queue is not empty, add the message to the queue
-            arrival(msg);
-            queue.insert(msg);
-            msg->setTimestamp();
-            emit(qlenSignal, queue.getLength());
-        }
         // Set queue entry time in msg
         PoTMsg* sMsg= check_and_cast<PoTMsg*>(msg);
-        sMsg->setTime_queue(simTime());
-        int twinProv=sMsg->getOtherProv();
-        LenMsg* lenMsg = new LenMsg;
-        lenMsg->setID(sMsg->getID());
-        lenMsg->setLen(queue.getLength());
-        potRQqueueLen[sMsg->getID()]=std::pair<PoTMsg*, int>(sMsg, queue.getLength());
-        send(lenMsg,"prov$o",twinProv);
+        if(
+                potRQTwinQueueLen.find(sMsg->getID())==potRQTwinQueueLen.end()
+                ||
+                (
+                        potRQTwinQueueLen[sMsg->getID()]>queue.getLength()+(msgServiced?1:0)
+                        ||
+                        (
+                                potRQTwinQueueLen[sMsg->getID()]==queue.getLength()+(msgServiced?1:0)
+                                &&
+                                !resolveConflict(sMsg->getOtherProv(),this->getIndex()+par("offset").intValue())
+                        )
+                )
+          )
+        {
+            if (!msgServiced) { // If the queue is empty, serve the new mesage directly
+                arrival(msg);
+                msgServiced = msg;
+                emit(queueingTimeSignal, SIMTIME_ZERO);
+                simtime_t serviceTime = startService(msgServiced);
+                scheduleAt(simTime()+serviceTime, endServiceMsg);
+
+                emit(busySignal, true);
+            }
+            else { // If the queue is not empty, add the message to the queue
+                arrival(msg);
+                queue.insert(msg);
+                msg->setTimestamp();
+                emit(qlenSignal, queue.getLength());
+            }
+            sMsg->setTime_queue(simTime());
+            int twinProv=sMsg->getOtherProv();
+            LenMsg* lenMsg = new LenMsg;
+            lenMsg->setSource(this->getIndex()+par("offset").intValue());
+            lenMsg->setID(sMsg->getID());
+            lenMsg->setLen(queue.getLength());
+            potRQqueueLen[sMsg->getID()]=std::pair<PoTMsg*, int>(sMsg, queue.getLength());
+            send(lenMsg,"prov$o",(twinProv>lenMsg->getSource()?twinProv-1:twinProv));
+        }
+        else
+        {
+            EV << "TwinQLen " << potRQTwinQueueLen[sMsg->getID()] << std::endl;
+            delete msg;
+        }
+        EV << "TwinLen at arrival " << (potRQTwinQueueLen.find(sMsg->getID())!=potRQTwinQueueLen.end()?potRQTwinQueueLen[sMsg->getID()]:-1) << " " << resolveConflict(sMsg->getOtherProv(),this->getIndex()+par("offset").intValue()) <<std::endl;
+        EV << "RQ ID " << sMsg->getID()<<std::endl;
     }
 }
 

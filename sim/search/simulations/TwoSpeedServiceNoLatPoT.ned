@@ -91,14 +91,13 @@ network TwoSpeedServiceNoLatPoT
         for i=n_RH..n_RH+n_RM-1, for j=0..sizeof(malSPs)-1 {
             malSPs[j].out++ --> collChan --> sinks[i].in++;
         }
-
-        for i=0..sizeof(malSPs)-1, for j=0..sizeof(malSPs)-1, if i!=j {
-            malSPs[i].prov++ <--> collChan <--> malSPs[j].prov++;
-        }
-        for i=0..sizeof(fifos)-1, for j=0..sizeof(fifos)-1, if i!=j{
+		for i=0..sizeof(fifos)-1, for j=i+1..sizeof(fifos)-1{
             fifos[i].prov++ <--> honChan <--> fifos[j].prov++;
         }
-        for i=0..sizeof(fifos)-1, for j=0..sizeof(malSPs)-1, if i!=j{
+        for i=0..sizeof(fifos)-1, for j=0..sizeof(malSPs)-1{
             fifos[i].prov++ <--> malChan <--> malSPs[j].prov++;
+        }
+        for i=0..sizeof(malSPs)-1, for j=i+1..sizeof(malSPs)-1 {
+            malSPs[i].prov++ <--> collChan <--> malSPs[j].prov++;
         }
 }

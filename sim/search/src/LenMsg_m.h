@@ -25,6 +25,7 @@ class LenMsg;
  * //
  * packet LenMsg
  * {
+ *     int source;
  *     int ID;
  *     int len;
  * }
@@ -33,6 +34,7 @@ class LenMsg;
 class LenMsg : public ::omnetpp::cPacket
 {
   protected:
+    int source = 0;
     int ID = 0;
     int len = 0;
 
@@ -50,6 +52,9 @@ class LenMsg : public ::omnetpp::cPacket
     virtual LenMsg *dup() const override {return new LenMsg(*this);}
     virtual void parsimPack(omnetpp::cCommBuffer *b) const override;
     virtual void parsimUnpack(omnetpp::cCommBuffer *b) override;
+
+    virtual int getSource() const;
+    virtual void setSource(int source);
 
     virtual int getID() const;
     virtual void setID(int ID);
