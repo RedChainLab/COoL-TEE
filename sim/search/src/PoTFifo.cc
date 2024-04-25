@@ -52,7 +52,11 @@ void PoTFifo::handleMessage(cMessage* msg)
             {
                 PoTMsg* rqMsg=potRQqueueLen[lmsg->getID()].first;
                 EV << "Bef " << queue.getLength() << std::endl;
-                queue.remove(rqMsg);
+                cObject* objMsg=queue.remove(rqMsg);
+                if(objMsg)
+                {
+                    delete rqMsg;
+                }
                 EV << "Aft " << queue.getLength() << std::endl;
                 // handle unserved RQ msg destruction
             }
