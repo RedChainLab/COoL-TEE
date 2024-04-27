@@ -61,11 +61,11 @@ COLUMN=("DIFF" if RELATIVE else END.name)
 INPUT_DIR="E:/wt"
 EXP_LIST=[
         "wait100noLatByzRho100",
-        "wait100k2r375noLatByzRho",
+        "wait100k2r75noLatByzRhoPoT",
     ]
 CONFIG_FILENAME_LIST=[
         "configs_8SP_wait100noLatByzRho100",
-        "configs_8SP_wait100k2r375noLatByzRho"
+        "configs_8SP_wait100k2r75noLatByzRhoPoT"
     ]
 
 BEHAVIOURS={"HON_CONS":1,"MAL_CONS":1,"HON_PROV":1,"MAL_PROV":0}
@@ -115,7 +115,7 @@ conditions_list=[
         ],
         [
             [
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","37.5")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
             ]
         ]
     ]

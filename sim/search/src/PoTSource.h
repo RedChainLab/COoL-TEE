@@ -16,9 +16,9 @@
 #ifndef POTSOURCE_H_
 #define POTSOURCE_H_
 
-#include "MultiSource.h"
+#include "LOolSource.h"
 
-class PoTSource: public MultiSource {
+class PoTSource: public LOolSource {
 protected:
     virtual void handleMessage(cMessage *msg) override;
 };

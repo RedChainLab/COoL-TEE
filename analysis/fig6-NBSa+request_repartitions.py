@@ -61,11 +61,11 @@ COLUMN=("DIFF" if RELATIVE else END.name)
 INPUT_DIR="E:/wt"
 EXP_LIST=[
         "wait100noLatByzRho100",
-        "wait100k2r375noLatByzRho",
+        "wait100k2r75noLatByzRhoPoT",
     ]
 CONFIG_FILENAME_LIST=[
         "configs_8SP_wait100noLatByzRho100",
-        "configs_8SP_wait100k2r375noLatByzRho"
+        "configs_8SP_wait100k2r75noLatByzRhoPoT"
     ]
 
 BEHAVIOURS={"HON_CONS":1,"MAL_CONS":1,"HON_PROV":1,"MAL_PROV":0}
@@ -142,14 +142,14 @@ conditions_list=[
         ],
         [
             [
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","37.5")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","37.5")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","37.5")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","37.5")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","37.5")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","37.5")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","37.5")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","37.5")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
             ]
         ]
     ]
@@ -258,6 +258,20 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
+cats=[('Malicious consumers',  'COoL Content attack'),
+            ('Malicious consumers', 'random Timing attack'),
+            ('Malicious consumers',   'COoL Timing attack'),
+            ('Malicious consumers',    'PoT Timing attack'),
+            ('Malicious consumers',      'COoL Fault-free'),
+            (   'Honest consumers',  'COoL Content attack'),
+            (   'Honest consumers', 'random Timing attack'),
+            (   'Honest consumers',   'COoL Timing attack'),
+            (   'Honest consumers',    'PoT Timing attack'),
+            (   'Honest consumers',      'COoL Fault-free'),
+            ]
+df=df.reindex(index=cats)
+df=df.rename(index={'PoT Timing attack':'COoL-PoT Timing attack'})
+
 # Create figure with a subplot for each factory zone with a relative width
 # proportionate to the number of factories
 zones = df.index.levels[0]
@@ -324,9 +338,9 @@ legend_elements=[
 ]
 
 for k in range(0,2):
-    for j in range(0,4):
+    for j in range(0,5):
         for i in range(0,8):
-            ax.text(-4.67+i*0.114+j*1+k*4.29, -0.1, f"{i+1}", ha="center", va="bottom")
+            ax.text(-4.67-1.1+i*0.114+j*1+k*(4.29+1.075), -0.1, f"{i+1}", ha="center", va="bottom")
 # Add legend using the labels and handles from the last subplot
 fig.legend(handles=legend_elements, loc=(0.12, 0.775))
 fig.tight_layout()
@@ -442,6 +456,20 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
+cats=[('Malicious consumers',  'COoL Content attack'),
+            ('Malicious consumers', 'random Timing attack'),
+            ('Malicious consumers',   'COoL Timing attack'),
+            ('Malicious consumers',    'PoT Timing attack'),
+            ('Malicious consumers',      'COoL Fault-free'),
+            (   'Honest consumers',  'COoL Content attack'),
+            (   'Honest consumers', 'random Timing attack'),
+            (   'Honest consumers',   'COoL Timing attack'),
+            (   'Honest consumers',    'PoT Timing attack'),
+            (   'Honest consumers',      'COoL Fault-free'),
+            ]
+df=df.reindex(index=cats)
+df=df.rename(index={'PoT Timing attack':'COoL-PoT Timing attack'})
+
 # Create figure with a subplot for each factory zone with a relative width
 # proportionate to the number of factories
 zones = df.index.levels[0]
@@ -502,9 +530,9 @@ for zone, ax in zip(zones, axes):
     ax.grid(axis="y", which="minor", alpha=0.3)
 
 for k in range(0,2):
-    for j in range(0,4):
+    for j in range(0,5):
         for i in range(0,8):
-            ax.text(-4.67+i*0.114+j*1+k*4.29, -0.1, f"{i+1}", ha="center", va="bottom")
+            ax.text(-4.67-1.1+i*0.114+j*1+k*(4.29+1.075), -0.1, f"{i+1}", ha="center", va="bottom")
 
 legend_elements=[
     Patch(facecolor="lightskyblue",edgecolor='black', label='Sent to honest providers'),
@@ -517,4 +545,7 @@ filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-sentrq-cons-behav-prov-be
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
+
+
+# %%
 
