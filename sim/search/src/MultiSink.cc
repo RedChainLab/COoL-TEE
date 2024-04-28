@@ -24,6 +24,8 @@ Define_Module(MultiSink);
 #include<algorithm>
 #include <iterator>
 
+#include "Vector_m.h"
+
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -88,7 +90,19 @@ void MultiSink::initialize()
     r3 = std::vector<double>(nSPs,1/double(nSPs));
     providerAvgLatency = std::vector<simtime_t>(nSPs,SIMTIME_ZERO);
     providerPrevAvgRelLatency = std::vector<double>(nSPs,0);
-    providerRatios = std::vector<double>(nSPs,1/double(nSPs));
+    if(this->par("hardcodedRatios").boolValue())
+    {
+        providerRatios = std::vector<double>(nSPs);
+        Vector* vec = (Vector*)par("hardcodedRatiosVec").objectValue(); // e.g. "aa bb cc";
+        for(int i=0; i<nSPs; i++)
+        {
+            providerRatios[i]=vec->getVal(i);
+        }
+    }
+    else
+    {
+        providerRatios = std::vector<double>(nSPs,1/double(nSPs));
+    }
     providerLatencies= std::vector<std::vector<simtime_t>>(nSPs,std::vector<simtime_t>());
     droppedJobs=std::vector<std::vector<simtime_t>>(nSPs,std::vector<simtime_t>());
     droppedJobsAvg = std::vector<double>(nSPs,0);

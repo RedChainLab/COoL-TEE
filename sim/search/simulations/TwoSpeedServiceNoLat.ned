@@ -53,7 +53,7 @@ network TwoSpeedServiceNoLat
             delay = 0ms;
         }
     submodules:
-        sources[n_RH+n_RM]: <req_type> like IMultiSource {
+        sources[n_RH+n_RM]: <default(req_type)> like IMultiSource {
             @display("p=100,100,c,100,;t=,l,");
         }
         sinks[n_RH+n_RM]: MultiSink {

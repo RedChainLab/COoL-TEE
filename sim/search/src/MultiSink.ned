@@ -23,12 +23,14 @@ simple MultiSink extends AbstractSink
     parameters:
     	@class(MultiSink);
         int location_index @mutable;
-    	int updateRatiosCount;
+    	int updateRatiosCount=default(1);
     	double x1;
     	double kErr @mutable=default(0);
     	double kD @mutable=default(0);
     	int windowSize;
     	double dropSens;
+    	bool hardcodedRatios=default(false);
+    	object hardcodedRatiosVec=default(nullptr);
     	
     	string outputPathPrefix;
     	string runPath;
