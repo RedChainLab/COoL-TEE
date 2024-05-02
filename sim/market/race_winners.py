@@ -551,9 +551,9 @@ if __name__ == "__main__":
     # <EXPERIMENT CONFIG>
     ###
 
-    EXP_DIR="wait100k1r75noLatByzRhoCuckoo"#"wait100k2r75noLatByzRhoPoT"#"wait100k2r375noLatByzRho"#"wait500ByzRho100"#"wait100noLatByzRho100"
+    EXP_DIR="wait100k1r75noLatByzRhoCuckooContent"#"wait100kXrYnoLatByzRho"#"wait100k1r75noLatByzRhoCuckoo"#"wait100k2r75noLatByzRhoPoT"#"wait100k2r375noLatByzRho"#"wait500ByzRho100"#"wait100noLatByzRho100"
     
-    CONFIG_FILENAME="configs_8SP_wait100k1r75noLatByzRhoCuckoo"#"configs_8SP_wait100k2r75noLatByzRhoPoT"#"configs_8SP_wait100k2r375noLatByzRho"#"configs_8SP_wait500ByzRho100"#"configs_8SP_wait100noLatByzRho100"
+    CONFIG_FILENAME="configs_8SP_wait100k1r75noLatByzRhoCuckooContent"#"configs_8SP_wait100kXrYnoLatByzRho"#"configs_8SP_wait100k1r75noLatByzRhoCuckoo"#"configs_8SP_wait100k2r75noLatByzRhoPoT"#"configs_8SP_wait100k2r375noLatByzRho"#"configs_8SP_wait500ByzRho100"#"configs_8SP_wait100noLatByzRho100"
 
     EXP_SPECS=[
             #"noTEE",
