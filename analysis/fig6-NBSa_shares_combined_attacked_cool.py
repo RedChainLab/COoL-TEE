@@ -85,7 +85,7 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["solid","dashed","solid","dotted","solid"]
+linestyles=["solid","solid","dashed","dotted","solid"]
 colors=["lightseagreen","navy","royalblue","tab:blue","tab:brown",]
 for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
