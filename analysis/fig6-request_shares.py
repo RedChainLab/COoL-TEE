@@ -19,6 +19,17 @@ d={
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     }
 
+# Attacked COoL
+# d={ 
+#     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
+#                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
+#     'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',
+#                     'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',],
+#     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
+#     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
+#     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
+#     }
+
 for k, exp_specs in enumerate(EXP_SPECS):
     for i, exp_spec in enumerate(exp_specs):
         for j, conditions in enumerate(conditions_list[k][i]):
@@ -94,7 +105,7 @@ cats=[
             ]
 df=df.reindex(index=cats)
 df=df.rename(index={'PoT Timing attack':'COoL-PoT Timing attack'})
-df=df.rename(index={'CuCOoL Timing attack':'COoL Cuckoo attack'})
+df=df.rename(index={'CuCOoL Timing attack':'COoL Cuckoo-T attack'})
 
 # Create figure with a subplot for each factory zone with a relative width
 # proportionate to the number of factories
@@ -126,7 +137,7 @@ for zone, ax in zip(zones, axes):
 
     # Set and place x labels for factory zones
     ax.set_xlabel(zone)
-    ax.xaxis.set_label_coords(x=0.5, y=-0.45)
+    ax.xaxis.set_label_coords(x=0.5, y=-0.475)
     
     # Format major tick labels for factory names: note that because this figure is
     # only about 10 inches wide, I choose to rewrite the long names on two lines.
@@ -134,7 +145,7 @@ for zone, ax in zip(zones, axes):
                   for name in df.xs(zone).index]
     ax.set_xticks(np.arange(df.xs(zone).index.size))
     ax.set_xticklabels(ticklabels, rotation=0, ha='center')
-    ax.tick_params(axis='x', length=0, pad=14)
+    ax.tick_params(axis='x', length=0, pad=18)
     
     # Set and format minor tick marks for separation lines between zones: note
     # that except for the first subplot, only the right tick mark is drawn to avoid
@@ -143,10 +154,10 @@ for zone, ax in zip(zones, axes):
     if firstCol:
         ax.set_ylabel("Share of requests")
         ax.yaxis.set_label_coords(x=-.1, y=0.5)
-        ax.set_xticks([*ax.get_xlim()], minor=True)
+        #ax.set_xticks([*ax.get_xlim()], minor=True)
         ax.set_yticklabels([f"{x}\%" for x in range(0,101,10)])
         firstCol = False
-    else:
+    #else:
         ax.set_xticks([ax.get_xlim()[1]], minor=True)
     ax.tick_params(axis="x", which='minor', length=55, width=0.8, color=[0, 0, 0, alpha])
 
@@ -155,15 +166,22 @@ for zone, ax in zip(zones, axes):
     ax.grid(axis="y", which="major", alpha=1)
     ax.grid(axis="y", which="minor", alpha=0.3)
 
-for k in range(0,2):
-    for j in range(0,6):
-        for i in range(0,8):
-            ax.text(-4.67-2.23+i*0.114+j*1+k*(4.29+2.2), -0.1, f"{i+1}", ha="center", va="bottom")
-
 legend_elements=[
     Patch(facecolor="lightskyblue",edgecolor='black', label='Sent to honest providers'),
     Patch(facecolor="crimson",edgecolor='black', label='Sent to malicious providers'),
 ]
+
+pM_xlabel_height=-0.15
+nb_exps=6
+for j in range(0,nb_exps):
+    for i in range(0,8):
+        ax.text(-0.4+i*0.114+j, pM_xlabel_height, f"$\\frac{i+1}{8}$", ha="center", va="bottom")
+        ax.text(-(0.9+nb_exps)+i*0.114+j, pM_xlabel_height, f"$\\frac{i+1}{8}$", ha="center", va="bottom")
+ax.text(-(nb_exps+1.1), pM_xlabel_height, "$p_M$:", ha="right", va="bottom")
+ax.text(-(nb_exps+1.1), pM_xlabel_height-0.1, "Prov. selection:", ha="right", va="bottom")
+ax.text(-(nb_exps+1.1), pM_xlabel_height-0.2, "Attack type:", ha="right", va="bottom")
+ax.text(-(nb_exps+1.1), pM_xlabel_height-0.4, "Sent by:", ha="right", va="bottom")
+
 # Add legend using the labels and handles from the last subplot
 fig.legend(handles=legend_elements, loc=(0.165, 0.3575))
 fig.tight_layout()
