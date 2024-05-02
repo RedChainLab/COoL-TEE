@@ -120,9 +120,9 @@ for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, yerr=err, linestyle=ls, label=idx, color=cl, ecolor='black', capsize=3)
 
 ax.vlines(1,0,1, color="black")
-ax.text(1.1,0.05,"$p^{exodus}_{1}$", ha="left")
+ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
 ax.vlines(4,0,1, color="black")
-ax.text(4.1,0.05,"$p^{exodus}_{2}$", ha="left")
+ax.text(4.1,0.05,"$p_{exodus}^{timing}$", ha="left")
 
 ax.set_ylim(0,1)
 ax.set_yticks(np.arange(0,1.1,0.1))

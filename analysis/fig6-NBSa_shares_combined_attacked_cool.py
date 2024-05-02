@@ -10,10 +10,10 @@ from fig6_config_attacked_cool import *
 count=0
 # Attacked COoL
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
-                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-    'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',
-                    'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',],
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
+                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
+    'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack', 'COoL Fault-free',
+                    'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack', 'COoL Fault-free'],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -85,15 +85,16 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["solid","dashed","dotted","solid","dashed","solid"]
-for ls, (idx, row), (_,err) in zip(linestyles, df2.iterrows(), dfErr.iterrows()):
+linestyles=["solid","dashed","solid","dotted","solid"]
+colors=["lightseagreen","navy","royalblue","tab:blue","tab:brown",]
+for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
-    ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, linestyle=ls, label=idx, yerr=err, ecolor='black', capsize=3)
+    ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, linestyle=ls, color=cl, label=idx, yerr=err, ecolor='black', capsize=3)
 
 ax.vlines(1,0,1, color="black")
-ax.text(1.1,0.05,"$p^{exodus}_{1}$", ha="left")
+ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
 ax.vlines(4,0,1, color="black")
-ax.text(4.1,0.05,"$p^{exodus}_{2}$", ha="left")
+ax.text(4.1,0.05,"$p_{exodus}^{timing}$", ha="left")
 
 ax.set_ylim(0,1)
 ax.set_yticks(np.arange(0,1.1,0.1))
@@ -106,7 +107,7 @@ ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Share of dNBS-assets by malicious consumers")
 
 handles, labels = ax.get_legend_handles_labels()
-fig.legend(handles[::-1], labels[::-1], bbox_to_anchor=(0.445, 0.0, 0.5, 0.5), labelspacing=0.5)
+fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(0.445, 0.025, 0.5, 0.5), labelspacing=0.5)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"

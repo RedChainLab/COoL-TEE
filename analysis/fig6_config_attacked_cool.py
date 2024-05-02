@@ -64,12 +64,14 @@ EXP_LIST=[
         # "wait100k2r75noLatByzRhoPoT",
         "wait100k1r75noLatByzRhoCuckoo",
         "wait100k1r75noLatByzRhoCuckooContent",
+        "wait100noLatByzRho100",
     ]
 CONFIG_FILENAME_LIST=[
         "configs_8SP_wait100noLatByzRho100",
         # "configs_8SP_wait100k2r75noLatByzRhoPoT",
         "configs_8SP_wait100k1r75noLatByzRhoCuckoo",
         "configs_8SP_wait100k1r75noLatByzRhoCuckooContent",
+        "configs_8SP_wait100noLatByzRho100",
     ]
 
 BEHAVIOURS={"HON_CONS":1,"MAL_CONS":1,"HON_PROV":1,"MAL_PROV":0}
@@ -104,6 +106,13 @@ EXP_SPECS=[
                 "sameDC",
                 f"+{TIME_OFFSET}s"
             ]
+        ],
+        [
+            [
+                "WtA",
+                "sameDC",
+                f"+{TIME_OFFSET}s"
+            ],
         ],
     ]
 
@@ -175,6 +184,18 @@ conditions_list=[
                 [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
                 [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
                 [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
+            ]
+        ],
+        [
+            [
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
             ]
         ]
     ]

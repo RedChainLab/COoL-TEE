@@ -64,6 +64,7 @@ EXP_LIST=[
         # "wait100k2r375noLatByzRho",
         # "wait100k2r75noLatByzRhoPoT",
         "wait100kXrYnoLatByzRho",
+        "wait100noLatByzRho100",
         # "wait100k1r75noLatByzRhoCuckoo",
         # "wait100k1r75noLatByzRhoCuckooContent",
     ]
@@ -72,6 +73,7 @@ CONFIG_FILENAME_LIST=[
         # "configs_8SP_wait100k2r375noLatByzRho",
         # "configs_8SP_wait100k2r75noLatByzRhoPoT",
         "configs_8SP_wait100kXrYnoLatByzRho",
+        "configs_8SP_wait100noLatByzRho100",
         # "configs_8SP_wait100k1r75noLatByzRhoCuckoo",
         # "configs_8SP_wait100k1r75noLatByzRhoCuckooContent",
     ]
@@ -100,13 +102,13 @@ EXP_SPECS=[
                 f"+{TIME_OFFSET}s"
             ]
         ],
-        # [
-        #     [
-        #         "WtA",
-        #         "sameDC",
-        #         f"+{TIME_OFFSET}s"
-        #     ]
-        # ],
+        [
+            [
+                "WtA",
+                "sameDC",
+                f"+{TIME_OFFSET}s"
+            ]
+        ],
         # [
         #     [
         #         "noTEE",
@@ -210,42 +212,18 @@ conditions_list=[
                 [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
             ],
         ],
-        # [
-        #     [
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
-        #     ]
-        # ],
-        # [
-        #     [
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
-        #         [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
-        #     ]
-        # ],
-        # [
-        #     [
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75")],
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75")],
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
-        #         [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
-        #     ],
-        # ]
+        [
+            [
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
+            ]
+        ]
     ]
 
 idx_cols=["MARKET_REPETITION","REPETITION","CONSUMER_BEHAVIOUR","CONSUMER_ID","PROVIDER_BEHAVIOUR","PROVIDER_ID","REQUEST_ID"]
