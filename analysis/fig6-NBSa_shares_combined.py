@@ -114,7 +114,7 @@ df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
 linestyles=["dashed","solid","dotted","solid","dashed","solid"]
-colors=["royalblue","navy","tomato","lightseagreen","dodgerblue","saddlebrown"]
+colors=["royalblue","navy","lightsalmon","lightseagreen","dodgerblue","saddlebrown"]
 for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, yerr=err, linestyle=ls, label=idx, color=cl, ecolor='black', capsize=3)
