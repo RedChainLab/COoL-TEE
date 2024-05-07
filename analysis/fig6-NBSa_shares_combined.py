@@ -9,10 +9,10 @@ from fig6_config import *
 
 count=0
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
-                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-    'ATTACK_TYPE': ['COoL Content attack', 'random Timing attack', 'COoL Timing attack', 'COoL Fault-free', 'PoT Timing attack', 'CuCOoL Timing attack',
-                    'COoL Content attack', 'random Timing attack', 'COoL Timing attack', 'COoL Fault-free', 'PoT Timing attack', 'CuCOoL Timing attack',],
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
+                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', ],
+    'ATTACK_TYPE': [ 'COoL Timing attack', 'Fault-free', 'Power-of-Two Timing attack', 'COoL-PoT Timing attack', 
+                     'COoL Timing attack', 'Fault-free', 'Power-of-Two Timing attack', 'COoL-PoT Timing attack',],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -88,24 +88,23 @@ df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
 cats=[
-            ('Malicious consumers',    'CuCOoL Timing attack'),
-            ('Malicious consumers',  'COoL Content attack'),
-            ('Malicious consumers', 'random Timing attack'),
-            ('Malicious consumers',   'COoL Timing attack'),
-            ('Malicious consumers',    'PoT Timing attack'),
-            ('Malicious consumers',      'COoL Fault-free'),
-            (   'Honest consumers',    'CuCOoL Timing attack'),
-            (   'Honest consumers',  'COoL Content attack'),
-            (   'Honest consumers', 'random Timing attack'),
-            (   'Honest consumers',   'COoL Timing attack'),
-            (   'Honest consumers',    'PoT Timing attack'),
-            (   'Honest consumers',      'COoL Fault-free'),
+            ('Malicious consumers', 'Power-of-Two Timing attack'),
+            ('Malicious consumers', 'COoL Timing attack'),
+            ('Malicious consumers', 'COoL-PoT Timing attack'),
+            ('Malicious consumers', 'Fault-free'),
+            (   'Honest consumers', 'Power-of-Two Timing attack'),
+            (   'Honest consumers', 'COoL Timing attack'),
+            (   'Honest consumers', 'COoL-PoT Timing attack'),
+            (   'Honest consumers', 'Fault-free'),
             ]
 df=df.reindex(index=cats)
-df=df.rename(index={'PoT Timing attack':'COoL-PoT Timing attack'})
-df=df.rename(index={'CuCOoL Timing attack':'COoL Cuckoo-T attack'})
+df=df.rename(index={'Power-of-Two Timing attack':'PoT Timing attack'})
+df=df.rename(index={'PoT Timing attack':'PoT $\\vert$ Timing (TEE)'})
+df=df.rename(index={'COoL Timing attack':'COoL $\\vert$ Timing (TEE)'})
+df=df.rename(index={'COoL-PoT Timing attack':'COoL-PoT $\\vert$ Timing (TEE)'})
+df=df.rename(index={'Fault-free':'COoL $\\vert$ Fault-free'})
 
-fig, ax = plt.subplots(figsize=(3, 4))
+fig, ax = plt.subplots(figsize=(4.5, 4))
 
 df.columns=df.columns.swaplevel(0,1)
 #print(df)
@@ -113,32 +112,47 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["dashed","solid","dotted","solid","dashed","solid"]
-colors=["royalblue","navy","lightsalmon","lightseagreen","dodgerblue","saddlebrown"]
+linestyles=["solid","solid","dashed",(0,(1,1))]
+colors=["mediumseagreen","darkred","lightsalmon","saddlebrown"]
 for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, yerr=err, linestyle=ls, label=idx, color=cl, ecolor='black', capsize=3)
 
-ax.vlines(1,0,1, color="black")
-ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
+# ax.vlines(1,0,1, color="black")
+# ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
 ax.vlines(4,0,1, color="black")
-ax.text(4.1,0.05,"$p_{exodus}^{timing}$", ha="left")
+ax.text(4.1,0.45,"$p_{exodus}^{timing}$", ha="left")
 
-ax.set_ylim(0,1)
-ax.set_yticks(np.arange(0,1.1,0.1))
-ax.set_yticks(np.arange(0,1.01,0.02),minor=True)
-ax.set_yticklabels([f"{i}\%" for i in np.arange(0,101,10)])
+ax.set_ylim(0.4,1)
+ax.set_yticks(np.arange(0.4,1.1,0.1))
+ax.set_yticks(np.arange(0.4,1.01,0.02),minor=True)
+ax.set_yticklabels([f"{i}\%" for i in np.arange(40,101,10)])
 ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
 ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Share of dNBS-assets by malicious consumers")
 
-fig.legend( bbox_to_anchor=(0.47, 0.025, 0.5, 0.5), labelspacing=0.3)
+legend=fig.legend( bbox_to_anchor=(0.175, 0.45, 0.5, 0.5), labelspacing=0.3)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
+
+def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
+    fig  = legend.figure
+    fig.canvas.draw()
+    bbox  = legend.get_window_extent()
+    bbox = bbox.from_extents(*(bbox.extents + np.array(expand)))
+    bbox = bbox.transformed(fig.dpi_scale_trans.inverted())
+    fig.savefig(filename, dpi=1000, bbox_inches=bbox)
+
+ax.grid(visible=False,which="both",axis="both")
+export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
+ax.grid(axis="y", which="major", alpha=1)
+ax.grid(axis="y", which="minor", alpha=0.3)
+ax.grid(axis="x", which="major", alpha=1)
+
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
 
