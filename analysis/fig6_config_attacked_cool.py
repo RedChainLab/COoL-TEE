@@ -74,8 +74,6 @@ CONFIG_FILENAME_LIST=[
         "configs_8SP_wait100noLatByzRho100",
     ]
 
-BEHAVIOURS={"HON_CONS":1,"MAL_CONS":1,"HON_PROV":1,"MAL_PROV":0}
-
 TIME_OFFSET=2250
 EXP_SPECS=[
         [
