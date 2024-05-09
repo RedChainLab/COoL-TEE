@@ -37,13 +37,14 @@ def cuckoo_load(p_max_thr:int, rho_total:F, rho_hon:F, n_prov:int, r_hm:F, x1:F,
         #print([(F(lr_x1_hon_hon+lr_x3_hon_hon,(n_prov-f)*lr_hon),F(lr_mal_hon,(n_prov-f)*lr_mal)) for _ in range(n_prov-f)] +\
         #[(F(lr_x1_hon_mal+lr_x3_hon_mal,f*lr_hon),F(lr_mal_mal,f*lr_mal)) for _ in range(n_prov-f,n_prov)])
         values=[F(lr_mal_hon,(n_prov-f)*lr_mal) for _ in range(n_prov-f)]+[F(lr_mal_mal,f*lr_mal) for _ in range(n_prov-f,n_prov)]
+        values=[f if f.numerator<10000 else F(f"{f.numerator/f.denominator:.9f}") for f in values]
         output=f"{'${Vector{val:' if f==n_prov else '   Vector{val:'}{[str(frac.numerator)+'/'+str(frac.denominator) if frac.numerator>0 else 0 for frac in values]}{'},|' if f>1 else '} ! sHM}'}"
         output=output.replace("|","\\").replace("'","")
         if print_vec:
             print(output)
 
 if __name__ == "__main__":
-    PRINT_VEC=False
+    PRINT_VEC=True
     PRINT_P_EXODUS=True
 
     LR=960
@@ -53,8 +54,8 @@ if __name__ == "__main__":
 
     TARGET_TIMING_ATT_LOAD=F(95,100)
 
-    START_N_PROV=10
-    STOP_N_PROV=24
+    START_N_PROV=12
+    STOP_N_PROV=12
     STEP_N_PROV=2
 
     for n_prov in range(START_N_PROV,STOP_N_PROV+1,STEP_N_PROV):
