@@ -103,6 +103,8 @@ for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr
 ax.vlines(4,0.4,1, color="black")
 ax.text(4.1,0.45,"$p_{exodus}^{timing}$", ha="left")
 
+ax.set_xlim(-1.5,7.5)
+ax.set_xticks(np.arange(-1,8))
 ax.set_ylim(0.4,1)
 ax.set_yticks(np.arange(0.4,1.1,0.1))
 ax.set_yticks(np.arange(0.4,1.01,0.02),minor=True)

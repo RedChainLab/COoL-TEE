@@ -3,31 +3,21 @@
 
 # In[ ]:
 
-from fig6_config import *
+from fig6_config_attacked_cool12 import *
 
 # In[ ]:
 
 count=0
-d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
-                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', ],
-    'ATTACK_TYPE': [ 'COoL Timing attack', 'Fault-free', 'Power-of-Two Timing attack', 'COoL-PoT Timing attack', 
-                     'COoL Timing attack', 'Fault-free', 'Power-of-Two Timing attack', 'COoL-PoT Timing attack',],
-    **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-    **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-    **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-    }
-
 # Attacked COoL
-# d={ 
-#     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
-#                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-#     'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',
-#                     'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',],
-#     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-#     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-#     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-#     }
+d={ 
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
+                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
+    'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack', 'COoL Fault-free',
+                    'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack', 'COoL Fault-free'],
+    **{(i,"hon"):np.ones(2*nb_cond//N_SP)*2 for i in range(1,N_SP+1)},
+    **{(i,"mal"):np.ones(2*nb_cond//N_SP)*2 for i in range(1,N_SP+1)},
+    **{(i,"err"):np.ones(2*nb_cond//N_SP)*2 for i in range(1,N_SP+1)},
+    }
 
 for k, exp_specs in enumerate(EXP_SPECS):
     for i, exp_spec in enumerate(exp_specs):
@@ -35,7 +25,8 @@ for k, exp_specs in enumerate(EXP_SPECS):
             str_desc="-".join([EXP_LIST[k],*exp_spec,*CONFIG_FILENAME_LIST[k].split("_")[1:],"nS="+str(NB_POISSON_SAMPLES),"rS="+str(ASSET_RATE),",".join([a+"="+b for a,b in conditions])]).replace("*","x")
             str_cond=",".join([a+"="+b for a,b in conditions])+"-"+",".join(exp_spec)
             readable_cond=str_cond.split("-")[0].replace("kErr=0.00001*100","LOoL").replace("kErr=0","rdm").replace("hW=","")+","+("noTEE" if str_cond.split("-")[1].split(",")[0]=="noTEE" else "TEE")
-            nbByz=8-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1])*8 if "sHM=" in readable_cond else 0)
+            #nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1])*N_SP if "sHM=" in readable_cond else 0)
+            nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1].split("I")[0]) if "sHM=" in readable_cond else 0)
             readable_cond=re.sub("sHM=[0-9.]+",str(nbByz)+"MalProv",readable_cond)
             full_dfs=pd.read_csv(f"{OUTPUT_DIR}/{str_desc}.csv", usecols=cols, index_col=idx_cols, low_memory=True)
             full_dfs["DIFF"]=full_dfs[END]-full_dfs[BEGIN]
@@ -65,12 +56,12 @@ for k, exp_specs in enumerate(EXP_SPECS):
             #plt.errorbar(index+offset,mean_acq_behav["HON_PROV"], yerr=std_acq_behav["HON_PROV"], fmt='none', ecolor='darkblue', capsize=3)
             plt.errorbar(index+offset,mean_acq_behav["MAL_PROV"]+mean_acq_behav["HON_PROV"], yerr=std_acq_behav, fmt='none', ecolor='black', capsize=3)
 
-            d[(nbByz,"hon")][count//total_nb_byz]=mean_acq_behav["HON_PROV"][False]
-            d[(nbByz,"hon")][count//total_nb_byz+len(d[(nbByz,"hon")])//2]=mean_acq_behav["HON_PROV"][True]
-            d[(nbByz,"mal")][count//total_nb_byz]=mean_acq_behav["MAL_PROV"][False]
-            d[(nbByz,"mal")][count//total_nb_byz+len(d[(nbByz,"mal")])//2]=mean_acq_behav["MAL_PROV"][True]
-            d[(nbByz,"err")][count//total_nb_byz]=std_acq_behav[False]
-            d[(nbByz,"err")][count//total_nb_byz+len(d[(nbByz,"err")])//2]=std_acq_behav[True]
+            d[(nbByz,"hon")][count//N_SP]=mean_acq_behav["HON_PROV"][False]
+            d[(nbByz,"hon")][count//N_SP+len(d[(nbByz,"hon")])//2]=mean_acq_behav["HON_PROV"][True]
+            d[(nbByz,"mal")][count//N_SP]=mean_acq_behav["MAL_PROV"][False]
+            d[(nbByz,"mal")][count//N_SP+len(d[(nbByz,"mal")])//2]=mean_acq_behav["MAL_PROV"][True]
+            d[(nbByz,"err")][count//N_SP]=std_acq_behav[False]
+            d[(nbByz,"err")][count//N_SP+len(d[(nbByz,"err")])//2]=std_acq_behav[True]
             count+=1
             multiplier+=1
 
@@ -84,27 +75,16 @@ for k, exp_specs in enumerate(EXP_SPECS):
 df=pd.DataFrame(d)
 
 df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
-df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
-df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
+df=df[[df.columns[x//3+(x%3)*N_SP] for x in range(N_SP*3)]]
+df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,N_SP+1)],["hon","mal","err"]])
 
-cats=[
-            ('Malicious consumers', 'Power-of-Two Timing attack'),
-            ('Malicious consumers', 'COoL Timing attack'),
-            ('Malicious consumers', 'COoL-PoT Timing attack'),
-            ('Malicious consumers', 'Fault-free'),
-            (   'Honest consumers', 'Power-of-Two Timing attack'),
-            (   'Honest consumers', 'COoL Timing attack'),
-            (   'Honest consumers', 'COoL-PoT Timing attack'),
-            (   'Honest consumers', 'Fault-free'),
-            ]
-df=df.reindex(index=cats)
-df=df.rename(index={'Power-of-Two Timing attack':'PoT Timing attack'})
-df=df.rename(index={'PoT Timing attack':'PoT $\\vert$ Timing (TEE)'})
+df=df.rename(index={'COoL Cuckoo-C attack':'COoL $\\vert$ Cuckoo-Content (non-TEE)'})
+df=df.rename(index={'COoL Cuckoo-T attack':'COoL $\\vert$ Cuckoo-Timing (TEE)'})
 df=df.rename(index={'COoL Timing attack':'COoL $\\vert$ Timing (TEE)'})
-df=df.rename(index={'COoL-PoT Timing attack':'COoL-PoT $\\vert$ Timing (TEE)'})
+df=df.rename(index={'COoL Content attack':'COoL $\\vert$ Content (non-TEE)'})
 df=df.rename(index={'Fault-free':'COoL $\\vert$ Fault-free'})
 
-fig, ax = plt.subplots(figsize=(4.5, 4))
+fig, ax = plt.subplots(figsize=(3, 4))
 
 df.columns=df.columns.swaplevel(0,1)
 #print(df)
@@ -112,19 +92,14 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["solid","solid","dashed",(0,(1,1))]
-colors=["mediumseagreen","darkred","lightsalmon","saddlebrown"]
-for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr.iterrows()):
+linestyles=["solid","solid","dashed","dotted",(0,(1,1))]
+colors=["dodgerblue","navy","tab:blue","lightseagreen","tab:brown",]
+for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
-    ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, yerr=err, linestyle=ls, label=idx, color=cl, ecolor='black', capsize=3)
+    ax.errorbar([f"$\\frac{{{i+1}}}{{{N_SP}}}$" for i in range(0,N_SP)], row, linestyle=ls, color=cl, label=idx, yerr=err, ecolor='black', capsize=3)
 
-# ax.vlines(1,0,1, color="black")
-# ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
-ax.vlines(4,0,1, color="black")
-ax.text(4.1,0.45,"$p_{exodus}^{timing}$", ha="left")
-
-ax.set_xlim(-1.5,7.5)
-ax.set_xticks(np.arange(-1,8))
+ax.set_xlim(-1.5,11.5)
+ax.set_xticks(np.arange(-1,12))
 ax.set_ylim(0.4,1)
 ax.set_yticks(np.arange(0.4,1.1,0.1))
 ax.set_yticks(np.arange(0.4,1.01,0.02),minor=True)
@@ -135,11 +110,12 @@ ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Share of dNBS-assets by malicious consumers")
 
-legend=fig.legend( bbox_to_anchor=(0.175, 0.45, 0.5, 0.5), labelspacing=0.3)
+handles, labels = ax.get_legend_handles_labels()
+legend=fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(5, 5, 0.5, 0.5), labelspacing=0.5)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
-filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
-plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
+#filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
+filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}.pdf"
 
 def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
     fig  = legend.figure
@@ -151,12 +127,18 @@ def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
 
 ax.grid(visible=False,which="both",axis="both")
 export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
+
+ax.vlines(6,0.4,1, color="black")
+ax.text(5.8,0.425,"$p_{exodus}^{cuckoo-T}$", ha="right")
+ax.vlines(9,0.4,1, color="black")
+ax.text(8.8,0.425,"$p_{exodus}^{timing}$", ha="right")
+
 ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
 ax.grid(axis="x", which="major", alpha=1)
-
+legend.remove()
+plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
 
 # %%
-

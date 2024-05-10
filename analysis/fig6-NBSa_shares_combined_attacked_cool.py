@@ -97,6 +97,8 @@ for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.
     print(row)
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, linestyle=ls, color=cl, label=idx, yerr=err, ecolor='black', capsize=3)
 
+ax.set_xlim(-1.5,7.5)
+ax.set_xticks(np.arange(-1,8))
 ax.set_ylim(0.4,1)
 ax.set_yticks(np.arange(0.4,1.1,0.1))
 ax.set_yticks(np.arange(0.4,1.01,0.02),minor=True)
