@@ -45,7 +45,7 @@ def cuckoo_load(p_max_thr:int, rho_total:F, rho_hon:F, n_prov:int, r_hm:F, x1:F,
 
 if __name__ == "__main__":
     PRINT_VEC=True
-    PRINT_P_EXODUS=True
+    PRINT_P_EXODUS=False
 
     LR=960
     P_MAX_THR=160
@@ -54,8 +54,8 @@ if __name__ == "__main__":
 
     TARGET_TIMING_ATT_LOAD=F(95,100)
 
-    START_N_PROV=12
-    STOP_N_PROV=12
+    START_N_PROV=10
+    STOP_N_PROV=10
     STEP_N_PROV=2
 
     for n_prov in range(START_N_PROV,STOP_N_PROV+1,STEP_N_PROV):
