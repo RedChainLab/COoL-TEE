@@ -54,8 +54,8 @@ if __name__ == "__main__":
 
     TARGET_TIMING_ATT_LOAD=F(95,100)
 
-    START_N_PROV=10
-    STOP_N_PROV=10
+    START_N_PROV=12
+    STOP_N_PROV=12
     STEP_N_PROV=2
 
     for n_prov in range(START_N_PROV,STOP_N_PROV+1,STEP_N_PROV):
