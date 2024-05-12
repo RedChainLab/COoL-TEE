@@ -30,6 +30,8 @@ void Environment::initialize(int stage)
 {
     if(stage==1)
     {
+        assert(this->getParentModule()->getSubmoduleVectorSize("sinks")==this->getAncestorPar("n_sources").intValue());
+        assert(this->getParentModule()->getSubmoduleVectorSize("fifos")+this->getParentModule()->getSubmoduleVectorSize("malSPs")==this->getAncestorPar("n_fifos").intValue());
         this->addModules();
         this->setSignals();
         if(this->par("deltaNet").boolValue())

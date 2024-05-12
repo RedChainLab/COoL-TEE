@@ -31,11 +31,11 @@ network TwoSpeedServiceNoLat
         string req_type;
         double warmup @unit(s);
 
-        // dependent variables
-        int n_RH = int(ceil(n_sources*ratioRHM));
-        int n_RM = int(floor(n_sources*(1-ratioRHM)));
-        int n_SH = int(ceil(n_fifos*ratioSHM));
-        int n_SM = int(floor(n_fifos*(1-ratioSHM)));
+        // dependent variables, 0.5 offsets against floating point precision problems...
+        int n_RH = int(ceil(n_sources*ratioRHM-0.5));
+        int n_RM = int(floor(0.5+n_sources*(1-ratioRHM)));
+        int n_SH = int(ceil(n_fifos*ratioSHM-0.5));
+        int n_SM = int(floor(0.5+n_fifos*(1-ratioSHM)));
     types:
         channel malChan extends ned.DelayChannel
         {
