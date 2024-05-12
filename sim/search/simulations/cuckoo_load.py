@@ -45,7 +45,7 @@ def cuckoo_load(p_max_thr:int, rho_total:F, rho_hon:F, n_prov:int, r_hm:F, x1:F,
 
 if __name__ == "__main__":
     PRINT_VEC=True
-    PRINT_P_EXODUS=False
+    PRINT_P_EXODUS=True
 
     LR=960
     P_MAX_THR=160

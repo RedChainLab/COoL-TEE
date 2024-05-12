@@ -128,10 +128,10 @@ def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
 ax.grid(visible=False,which="both",axis="both")
 export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
 
-ax.vlines(6,0.4,1, color="black")
-ax.text(5.8,0.425,"$p_{exodus}^{cuckoo-T}$", ha="right")
-ax.vlines(9,0.4,1, color="black")
-ax.text(8.8,0.425,"$p_{exodus}^{timing}$", ha="right")
+ax.vlines(5,0.4,1, color="black")
+ax.text(4.8,0.45,"$p_{exodus}^{cuckoo-T}$", ha="right")
+ax.vlines(8,0.4,1, color="black")
+ax.text(7.8,0.45,"$p_{exodus}^{timing}$", ha="right")
 
 ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)

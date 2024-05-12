@@ -556,7 +556,7 @@ if __name__ == "__main__":
     CONFIG_FILENAME="configs_12SP_wait100r50noLatByzRho"#"configs_12SP_wait100r50noLatByzRhoCuckooTiming"#"configs_12SP_wait100r50noLatByzRhoCuckooContent"#"configs_8SP_wait100kXrYnoLatByzRho"#"configs_8SP_wait100k1r75noLatByzRhoCuckoo"#"configs_8SP_wait100k2r75noLatByzRhoPoT"#"configs_8SP_wait100k2r375noLatByzRho"#"configs_8SP_wait500ByzRho100"#"configs_8SP_wait100noLatByzRho100"
 
     EXP_SPECS=[
-            "noTEE",
+            #"noTEE",
             "WtA",#Winner takes all (assets)
             "sameDC",
             f"+{TIME_OFFSET}s"
@@ -777,6 +777,6 @@ if __name__ == "__main__":
             full_dfs=pd.read_csv(f"{OUTPUT_DIR}/{str_desc}.csv", usecols=cols, index_col=idx_cols, low_memory=True)
             print(f"Loaded data from {OUTPUT_DIR}/{str_desc}.csv")
 
-        plot_data(full_dfs, str_desc)
+        #plot_data(full_dfs, str_desc)
         plt.close('all')
     #plt.show()
