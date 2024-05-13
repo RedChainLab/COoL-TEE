@@ -98,10 +98,9 @@ cats=[
             (   'Honest consumers', 'Fault-free'),
             ]
 df=df.reindex(index=cats)
-df=df.rename(index={'Power-of-Two Timing attack':'PoT Timing attack'})
-df=df.rename(index={'PoT Timing attack':'PoT $\\vert$ Timing (TEE)'})
+df=df.rename(index={'Power-of-Two Timing attack':'sPoT $\\vert$ Timing (TEE)'})
 df=df.rename(index={'COoL Timing attack':'COoL $\\vert$ Timing (TEE)'})
-df=df.rename(index={'COoL-PoT Timing attack':'COoL-PoT $\\vert$ Timing (TEE)'})
+df=df.rename(index={'COoL-PoT Timing attack':'COoL-sPoT $\\vert$ Timing (TEE)'})
 df=df.rename(index={'Fault-free':'COoL $\\vert$ Fault-free'})
 
 fig, ax = plt.subplots(figsize=(4.5, 4))
@@ -135,7 +134,7 @@ ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Share of dNBS-assets by malicious consumers")
 
-legend=fig.legend( bbox_to_anchor=(0.175, 0.45, 0.5, 0.5), labelspacing=0.3)
+legend=fig.legend( bbox_to_anchor=(0.21, 0.45, 0.5, 0.5), labelspacing=0.3)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
