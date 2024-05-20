@@ -31,6 +31,8 @@ public:
     virtual void arrival(cMessage *msg) override;
     simtime_t startService(cMessage *msg) override;
     void endService(cMessage *msg) override;
+private:
+    virtual int getQueueLength();
 };
 
 #endif /* POTFIFO_H_ */

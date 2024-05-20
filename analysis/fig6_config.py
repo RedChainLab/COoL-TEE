@@ -60,13 +60,16 @@ RQ_type=rl.RQ_types.All
 COLUMN=("DIFF" if RELATIVE else END.name)
 INPUT_DIR="E:/wt"
 EXP_LIST=[
+        "wait100r75noLatByzRhoQatt",
         "wait100noLatByzRho100",
-        "wait100k2r75noLatByzRhoPoT",
+
+        #"wait100k2r75noLatByzRhoPoT",
         #"wait100k1r75noLatByzRhoCuckoo",
     ]
 CONFIG_FILENAME_LIST=[
+        "configs_8SP_wait100k2r75noLatByzRhoQatt",
         "configs_8SP_wait100noLatByzRho100",
-        "configs_8SP_wait100k2r75noLatByzRhoPoT",
+        #"configs_8SP_wait100k2r75noLatByzRhoPoT",
         #"configs_8SP_wait100k1r75noLatByzRhoCuckoo",
     ]
 
@@ -109,6 +112,45 @@ RECOMPUTE=1
 
 conditions_list=[
         [
+            [
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","75"),("qAtt","true")],
+
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75"),("qAtt","true")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75"),("qAtt","true")],
+
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","75"),("qAtt","false")],
+
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75"),("qAtt","false")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75"),("qAtt","false")],
+            ]
+        ],
+        [
             # [    
             #     [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
             #     [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
@@ -138,27 +180,6 @@ conditions_list=[
                 [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
                 [("hW","0ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
             ],
-        ],
-        [
-            [
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","75")],
-
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75")],
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75")],
-            ]
         ],
         # [
         #     [

@@ -17,7 +17,9 @@ package cooltee;
 
 simple PoTFifo extends AggFifo
 {
-    @class(PoTFifo);
+    parameters:
+        @class(PoTFifo);
+        bool queue_attack=default(false);
     gates:
         inout prov[];
 }

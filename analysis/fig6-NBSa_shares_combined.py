@@ -9,10 +9,10 @@ from fig6_config import *
 
 count=0
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
-                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', ],
-    'ATTACK_TYPE': [ 'COoL Timing attack', 'Fault-free', 'Power-of-Two Timing attack', 'COoL-PoT Timing attack', 
-                     'COoL Timing attack', 'Fault-free', 'Power-of-Two Timing attack', 'COoL-PoT Timing attack',],
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
+                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers',],
+    'ATTACK_TYPE': [ 'sPoT $\\vert$ Queue-T (TEE)', 'COoL-PoT $\\vert$ Queue-T (TEE)', 'sPoT $\\vert$ Timing (TEE)', 'COoL-PoT $\\vert$ Timing (TEE)', 'COoL $\\vert$ Timing (TEE)', 'COoL $\\vert$ Fault-free',   
+                     'sPoT $\\vert$ Queue-T (TEE)', 'COoL-PoT $\\vert$ Queue-T (TEE)', 'sPoT $\\vert$ Timing (TEE)', 'COoL-PoT $\\vert$ Timing (TEE)', 'COoL $\\vert$ Timing (TEE)', 'COoL $\\vert$ Fault-free', ],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -87,22 +87,6 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
-cats=[
-            ('Malicious consumers', 'Power-of-Two Timing attack'),
-            ('Malicious consumers', 'COoL Timing attack'),
-            ('Malicious consumers', 'COoL-PoT Timing attack'),
-            ('Malicious consumers', 'Fault-free'),
-            (   'Honest consumers', 'Power-of-Two Timing attack'),
-            (   'Honest consumers', 'COoL Timing attack'),
-            (   'Honest consumers', 'COoL-PoT Timing attack'),
-            (   'Honest consumers', 'Fault-free'),
-            ]
-df=df.reindex(index=cats)
-df=df.rename(index={'Power-of-Two Timing attack':'sPoT $\\vert$ Timing (TEE)'})
-df=df.rename(index={'COoL Timing attack':'COoL $\\vert$ Timing (TEE)'})
-df=df.rename(index={'COoL-PoT Timing attack':'COoL-sPoT $\\vert$ Timing (TEE)'})
-df=df.rename(index={'Fault-free':'COoL $\\vert$ Fault-free'})
-
 fig, ax = plt.subplots(figsize=(4.5, 4))
 
 df.columns=df.columns.swaplevel(0,1)
@@ -111,11 +95,13 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["solid","solid","dashed",(0,(1,1))]
-colors=["mediumseagreen","darkred","lightsalmon","saddlebrown"]
+linestyles=["solid","dashdot","dashed","dashed","solid", "dotted"]
+colors=["lightsalmon","darkred","lightsalmon","darkred", "black", "tab:brown"]
 for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, yerr=err, linestyle=ls, label=idx, color=cl, ecolor='black', capsize=3)
+
+handles, _ = ax.get_legend_handles_labels()
 
 # ax.vlines(1,0,1, color="black")
 # ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
@@ -134,7 +120,7 @@ ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Share of dNBS-assets by malicious consumers")
 
-legend=fig.legend( bbox_to_anchor=(0.21, 0.45, 0.5, 0.5), labelspacing=0.3)
+legend=fig.legend(handles=[handles[0]]+[handles[2]]+[handles[1]]+handles[3:], bbox_to_anchor=(0.21, 0.46, 0.5, 0.5), labelspacing=0.2)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
@@ -158,4 +144,3 @@ print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
 
 # %%
-
