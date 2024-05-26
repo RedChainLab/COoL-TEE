@@ -4,8 +4,8 @@
 # In[ ]:
 
 
-OUTPUT_DIR="/mnt/g/data"
-FIGS_DIR="/mnt/g/figs"
+OUTPUT_DIR="G:/data"
+FIGS_DIR="G:/figs"
 
 
 # In[ ]:
@@ -16,6 +16,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import math
+from datetime import datetime
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
@@ -104,7 +105,7 @@ print(values_per_key)
 str_vals=';'.join([','.join(v).replace('*','x') for v in values_per_key.values()])
 str_specs=';'.join([','.join(v) for v in EXP_SPECS])
 
-plt.figure(figsize=(3.5,3))
+plt.figure(figsize=(4.5,2))
 
 xstep=0.01
 ymax=0
@@ -136,11 +137,11 @@ for i, exp_spec in enumerate(EXP_SPECS):
         print(quantiles)
         print(f"Finished {readable_cond}")
         th_str="$^{th}$"
-        p=plt.plot(quantiles.loc[0.1],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'random'}: 10{th_str} pctl", linewidth=1, linestyle="dotted", color=colours[colour_idx])
-        plt.plot(quantiles.loc[0.25],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'random'}: 25{th_str} pctl", linewidth=1, color=colours[colour_idx], linestyle="dashed")
-        plt.plot(quantiles.loc[0.5],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'random'}: median", linewidth=1, color=colours[colour_idx])
-        plt.plot(quantiles.loc[0.75],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'random'}: 75{th_str} pctl", linewidth=1, color=colours[colour_idx], linestyle="dashed")
-        plt.plot(quantiles.loc[0.9],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'random'}: 90{th_str} pctl", linewidth=1, color=colours[colour_idx], linestyle="dotted")
+        p=plt.plot(quantiles.loc[0.1],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'DeSearch-like'}: 10{th_str} pctl", linewidth=1, linestyle="dotted", color=colours[colour_idx])
+        plt.plot(quantiles.loc[0.25],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'DeSearch-like'}: 25{th_str} pctl", linewidth=1, color=colours[colour_idx], linestyle="dashed")
+        plt.plot(quantiles.loc[0.5],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'DeSearch-like'}: median", linewidth=1, color=colours[colour_idx])
+        plt.plot(quantiles.loc[0.75],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'DeSearch-like'}: 75{th_str} pctl", linewidth=1, color=colours[colour_idx], linestyle="dashed")
+        plt.plot(quantiles.loc[0.9],label=f"{'COoL' if readable_cond.split(',')[1]=='LOoL' else 'DeSearch-like'}: 90{th_str} pctl", linewidth=1, color=colours[colour_idx], linestyle="dotted")
         #plt.fill_between(quantiles.columns, quantiles.loc[0.1], quantiles.loc[0.9], alpha=0.2, color=p[0].get_color())
         #plt.fill_between(quantiles.columns, quantiles.loc[0.25], quantiles.loc[0.75], alpha=0.4, color=p[0].get_color())
         xmax=max(xmax,quantiles.columns.max())
@@ -151,9 +152,9 @@ ypow=math.ceil(math.log(ymax,10))-1
 xpow=math.ceil(math.log(xmax,10))-2
 ylabels=[f"{int(y/1000)}k" for y in np.arange(0,ymax+2*10**(ypow-1),10**ypow)]
 plt.yticks(np.arange(0,ymax+2*10**(ypow-1),10**ypow), labels=ylabels)
-plt.yticks(np.arange(0,ymax+2*10**(ypow-1),(10**ypow)/5),minor=True)
+plt.yticks(np.arange(0,ymax+2*10**(ypow-1),(10**ypow)/2),minor=True)
 plt.xticks(np.arange(0,xmax+10**xpow,10**xpow), labels=[f"{x:.1f}" if (int(10*x))%2==0 else "" for x in np.arange(0,xmax+10**xpow,10**xpow)])
-plt.xticks(np.arange(0,xmax+10**xpow,10**xpow/5),minor=True)
+plt.xticks(np.arange(0,xmax+10**xpow,10**xpow/2),minor=True)
 plt.grid(axis="y")
 plt.grid(axis="x")
 plt.grid(which="minor", axis="y", alpha=0.5)
@@ -161,9 +162,14 @@ plt.grid(which="minor", axis="x", alpha=0.5)
 plt.xlabel("Roundtrip response time $\Delta$ (s)")
 plt.ylabel("Number of requests")
 #plt.title(f"Response time distribution")
-plt.legend(reverse=True, loc="lower right", handletextpad=0.25, labelspacing=0.1)
-filename=f"{FIGS_DIR}/{EXP_DIR}-{str_specs}-lat-dist-cumul-quantiles-{BEGIN}-{END}-{str_vals}.pdf"
+
+plt.legend(reverse=True, loc="lower right", handlelength=1.5, handletextpad=0.25, labelspacing=0.025, fontsize="small", borderpad=0.2, ncols=2,columnspacing=1)
+plt.tight_layout()
+current_time=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+filename=f"{FIGS_DIR}/{EXP_DIR}-{str_specs}-lat-dist-cumul-quantiles-{BEGIN}-{END}-{str_vals}-{current_time}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 plt.show()
 
+
+# In[ ]:

@@ -78,15 +78,15 @@ df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
 df=df.rename(index={'Broadcast Timing attack':'Broadcast $\\vert$ Timing (TEE)'})
-df=df.rename(index={'rdm-k4 Timing attack':'Random-k=4 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'rdm-k4 Timing attack':'DeSearch-like-k=4 $\\vert$ Timing (TEE)'})
 df=df.rename(index={'COoL-k4 Timing attack':'COoL-k=4 $\\vert$ Timing (TEE)'})
-df=df.rename(index={'rdm-k2 Timing attack':'Random-k=2 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'rdm-k2 Timing attack':'DeSearch-like-k=2 $\\vert$ Timing (TEE)'})
 df=df.rename(index={'COoL-k2 Timing attack':'COoL-k=2 $\\vert$ Timing (TEE)'})
-df=df.rename(index={'rdm-k1 Timing attack':'Random-k=1 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'rdm-k1 Timing attack':'DeSearch-like-k=1 $\\vert$ Timing (TEE)'})
 df=df.rename(index={'COoL-k1 Timing attack':'COoL-k=1 $\\vert$ Timing (TEE)'})
 df=df.rename(index={'Fault-free':'COoL-k=1 $\\vert$ Fault-free'})
 
-fig, ax = plt.subplots(figsize=(4.5, 4))
+fig, ax = plt.subplots(figsize=(4.5,3))
 
 df.columns=df.columns.swaplevel(0,1)
 #print(df)
@@ -113,12 +113,13 @@ ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
 ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
-ax.set_ylabel(f"Share of dNBS-assets by malicious consumers")
+ax.set_ylabel(f"Malicious share of dNBS-assets")
 
-legend=fig.legend( bbox_to_anchor=(0.16, 0.45, 0.5, 0.5), labelspacing=0.25, fontsize="small")
+legend=fig.legend( bbox_to_anchor=(0.2, 0.45, 0.5, 0.5), labelspacing=0.25, fontsize="small", framealpha=0.7)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
-filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
+current_time=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}-{current_time}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
     fig  = legend.figure

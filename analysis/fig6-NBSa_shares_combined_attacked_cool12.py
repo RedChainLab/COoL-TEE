@@ -78,13 +78,13 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*N_SP] for x in range(N_SP*3)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,N_SP+1)],["hon","mal","err"]])
 
-df=df.rename(index={'COoL Cuckoo-C attack':'COoL $\\vert$ Cuckoo-Content (non-TEE)'})
-df=df.rename(index={'COoL Cuckoo-T attack':'COoL $\\vert$ Cuckoo-Timing (TEE)'})
-df=df.rename(index={'COoL Timing attack':'COoL $\\vert$ Timing (TEE)'})
-df=df.rename(index={'COoL Content attack':'COoL $\\vert$ Content (non-TEE)'})
-df=df.rename(index={'Fault-free':'COoL $\\vert$ Fault-free'})
+df=df.rename(index={'COoL Cuckoo-C attack':'Cuckoo-Content (non-TEE)'})
+df=df.rename(index={'COoL Cuckoo-T attack':'Cuckoo-Timing (TEE)'})
+df=df.rename(index={'COoL Timing attack':'Timing (TEE)'})
+df=df.rename(index={'COoL Content attack':'Content (non-TEE)'})
+df=df.rename(index={'COoL Fault-free':'Fault-free'})
 
-fig, ax = plt.subplots(figsize=(3, 4))
+fig, ax = plt.subplots(figsize=(4.5,3))
 
 df.columns=df.columns.swaplevel(0,1)
 #print(df)
@@ -98,7 +98,7 @@ for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.
     print(row)
     ax.errorbar([f"$\\frac{{{i+1}}}{{{N_SP}}}$" for i in range(0,N_SP)], row, linestyle=ls, color=cl, label=idx, yerr=err, ecolor='black', capsize=3)
 
-ax.set_xlim(-1.5,11.5)
+ax.set_xlim(-1.75,11.75)
 ax.set_xticks(np.arange(-1,12))
 ax.set_ylim(0.4,1)
 ax.set_yticks(np.arange(0.4,1.1,0.1))
@@ -108,14 +108,15 @@ ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
 ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
-ax.set_ylabel(f"Share of dNBS-assets by malicious consumers")
+ax.set_ylabel(f"Malicious share of dNBS-assets")
 
 handles, labels = ax.get_legend_handles_labels()
-legend=fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(5, 5, 0.5, 0.5), labelspacing=0.5)
+legend=fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(0.11, 0.45, 0.5, 0.5), labelspacing=0.5, fontsize="small",framealpha=0.7)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
-filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}.pdf"
+current_time=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{current_time}.pdf"
 
 def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
     fig  = legend.figure
@@ -126,17 +127,17 @@ def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
     fig.savefig(filename, dpi=1000, bbox_inches=bbox)
 
 ax.grid(visible=False,which="both",axis="both")
-export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
+#export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
 
 ax.vlines(5,0.4,1, color="black")
-ax.text(4.8,0.45,"$p_{exodus}^{cuckoo-T}$", ha="right")
+ax.text(5.1,0.45,"$p_{exodus}^{cuckoo-T}$", ha="left")
 ax.vlines(8,0.4,1, color="black")
-ax.text(7.8,0.45,"$p_{exodus}^{timing}$", ha="right")
+ax.text(8.1,0.45,"$p_{exodus}^{timing}$", ha="left")
 
 ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
 ax.grid(axis="x", which="major", alpha=1)
-legend.remove()
+#legend.remove()
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
