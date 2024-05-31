@@ -87,7 +87,7 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
-fig, ax = plt.subplots(figsize=(4.5,3))
+fig, ax = plt.subplots(figsize=(4.5,2.5))
 
 df.columns=df.columns.swaplevel(0,1)
 #print(df)
@@ -106,7 +106,7 @@ handles, _ = ax.get_legend_handles_labels()
 # ax.vlines(1,0,1, color="black")
 # ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
 ax.vlines(4,0,1, color="black")
-ax.text(4.1,0.45,"$p_{exodus}^{timing}$", ha="left")
+ax.text(4.1,0.43,"$p_{exodus}^{timing}$", ha="left")
 
 ax.set_xlim(-1.5,7.5)
 ax.set_xticks(np.arange(-1,8))
@@ -120,7 +120,7 @@ ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
-legend=fig.legend(handles=[handles[0]]+[handles[2]]+[handles[1]]+handles[3:], bbox_to_anchor=(0.125, 0.45, 0.5, 0.5), labelspacing=0.2, fontsize="small",framealpha=0.7)
+legend=fig.legend(handles=[handles[0]]+[handles[2]]+[handles[1]]+handles[3:], bbox_to_anchor=(0.125, 0.44, 0.5, 0.5), labelspacing=0.2, fontsize="small",framealpha=0.7)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

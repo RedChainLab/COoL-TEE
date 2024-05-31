@@ -83,7 +83,7 @@ df=df.rename(index={'COoL Timing attack':'Timing (TEE)'})
 df=df.rename(index={'COoL Content attack':'Content (non-TEE)'})
 df=df.rename(index={'COoL Fault-free':'Fault-free'})
 
-fig, ax = plt.subplots(figsize=(4.5,3))
+fig, ax = plt.subplots(figsize=(4.5,2.5))
 
 df.columns=df.columns.swaplevel(0,1)
 #print(df)
@@ -110,7 +110,7 @@ ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
 handles, labels = ax.get_legend_handles_labels()
-legend=fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(0.11, 0.45, 0.5, 0.5), labelspacing=0.2, fontsize="small", framealpha=0.7)
+legend=fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(0.11, 0.44, 0.5, 0.5), labelspacing=0.2, fontsize="small", framealpha=0.7)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%H-%M-%S")
@@ -128,9 +128,9 @@ ax.grid(visible=False,which="both",axis="both")
 #export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
 
 ax.vlines(1,0.4,1, color="black")
-ax.text(1.1,0.45,"$p_{exodus}^{cuckoo-T}$", ha="left")
+ax.text(1.1,0.43,"$p_{exodus}^{cuckoo-T}$", ha="left")
 ax.vlines(4,0.4,1, color="black")
-ax.text(4.1,0.45,"$p_{exodus}^{timing}$", ha="left")
+ax.text(4.1,0.43,"$p_{exodus}^{timing}$", ha="left")
 
 ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
