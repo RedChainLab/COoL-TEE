@@ -1,0 +1,10 @@
+{
+    "servers":[
+        {"hostname": "<hostname|IP>", "port": 12345, "weight": 0.125},
+        {"hostname": "<hostname|IP>", "port": 12346, "weight": 0.125},
+        {"hostname": "<hostname|IP>", "port": 12347, "weight": 0.125},
+        {"hostname": "<hostname|IP>", "port": 12348, "weight": 0.125}
+    ],
+    "clients":[
+    ]
+}

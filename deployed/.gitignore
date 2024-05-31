@@ -1,0 +1,9 @@
+deps
+out/client
+out/server
+*.o
+out/results*
+out/old
+out/*.png
+out/*.pdf
+*.7z

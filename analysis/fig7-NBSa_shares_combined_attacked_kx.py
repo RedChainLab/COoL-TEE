@@ -3,31 +3,37 @@
 
 # In[ ]:
 
-from fig6_config import *
+from analysis.fig7_config_attacked_kX import *
 
 # In[ ]:
 
 count=0
+# Attacked COoL
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
-                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers',],
-    'ATTACK_TYPE': [ 'sPoT $\\vert$ Queue-T (TEE)', 'COoL-PoT $\\vert$ Queue-T (TEE)', 'sPoT $\\vert$ Timing (TEE)', 'COoL-PoT $\\vert$ Timing (TEE)', 'COoL $\\vert$ Timing (TEE)', 'COoL $\\vert$ Fault-free',   
-                     'sPoT $\\vert$ Queue-T (TEE)', 'COoL-PoT $\\vert$ Queue-T (TEE)', 'sPoT $\\vert$ Timing (TEE)', 'COoL-PoT $\\vert$ Timing (TEE)', 'COoL $\\vert$ Timing (TEE)', 'COoL $\\vert$ Fault-free', ],
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers','Malicious consumers', 'Malicious consumers', #'Malicious consumers', 'Malicious consumers', 
+                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', #'Honest consumers', 'Honest consumers', 
+                            ],
+    'ATTACK_TYPE': ['Broadcast Timing attack', 
+                    #'rdm-k4 Timing attack', 
+                    #'COoL-k4 Timing attack', 
+                    'rdm-k2 Timing attack', 
+                    'COoL-k2 Timing attack', 
+                    'rdm-k1 Timing attack', 
+                    'COoL-k1 Timing attack', 
+                    'Fault-free',
+                    'Broadcast Timing attack', 
+                    #'rdm-k4 Timing attack', 
+                    #'COoL-k4 Timing attack', 
+                    'rdm-k2 Timing attack', 
+                    'COoL-k2 Timing attack', 
+                    'rdm-k1 Timing attack', 
+                    'COoL-k1 Timing attack', 
+                    'Fault-free'
+                ],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     }
-
-# Attacked COoL
-# d={ 
-#     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
-#                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-#     'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',
-#                     'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',],
-#     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-#     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-#     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
-#     }
 
 for k, exp_specs in enumerate(EXP_SPECS):
     for i, exp_spec in enumerate(exp_specs):
@@ -87,6 +93,15 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
+df=df.rename(index={'Broadcast Timing attack':'Broadcast $\\vert$ Timing (TEE)'})
+#df=df.rename(index={'rdm-k4 Timing attack':'DeSearch-like-k=4 $\\vert$ Timing (TEE)'})
+#df=df.rename(index={'COoL-k4 Timing attack':'COoL-k=4 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'rdm-k2 Timing attack':'DeSearch-like-k=2 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'COoL-k2 Timing attack':'COoL-k=2 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'rdm-k1 Timing attack':'DeSearch-like-k=1 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'COoL-k1 Timing attack':'COoL-k=1 $\\vert$ Timing (TEE)'})
+df=df.rename(index={'Fault-free':'COoL-k=1 $\\vert$ Fault-free'})
+
 fig, ax = plt.subplots(figsize=(4.5,2.5))
 
 df.columns=df.columns.swaplevel(0,1)
@@ -95,17 +110,13 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["solid","dashdot","dashed","dashed","solid", "dotted"]
-colors=["lightsalmon","darkred","lightsalmon","darkred", "black", "tab:brown"]
+linestyles=[(0, (1, 3)),"dashdot",(0, (5, 2)),(0, (3, 2)),"solid",(0, (1, 1))]
+colors=["darkgreen","skyblue","skyblue","darkred","darkred","tab:brown"]
 for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, yerr=err, linestyle=ls, label=idx, color=cl, ecolor='black', capsize=3)
 
-handles, _ = ax.get_legend_handles_labels()
-
-# ax.vlines(1,0,1, color="black")
-# ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
-ax.vlines(4,0,1, color="black")
+ax.vlines(4,0.4,1, color="black")
 ax.text(4.1,0.43,"$p_{exodus}^{timing}$", ha="left")
 
 ax.set_xlim(-1.5,7.5)
@@ -120,13 +131,12 @@ ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
-legend=fig.legend(handles=[handles[0]]+[handles[2]]+[handles[1]]+handles[3:], bbox_to_anchor=(0.125, 0.44, 0.5, 0.5), labelspacing=0.2, fontsize="small",framealpha=0.7)
+legend=fig.legend( bbox_to_anchor=(0.195, 0.44, 0.5, 0.5), labelspacing=0.25, fontsize="small", framealpha=0.7)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-acqshare-cons-behav-prov-behav-plot-werr_{step}-{BEGIN}-{END}-{str_vals}-{current_time}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
-
 def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
     fig  = legend.figure
     fig.canvas.draw()

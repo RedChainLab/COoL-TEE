@@ -3,7 +3,7 @@
 
 # In[ ]:
 
-from fig6_config_attacked_cool12 import *
+from analysis.fig8_config_attacked_cool12 import *
 
 # In[ ]:
 
