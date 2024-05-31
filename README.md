@@ -1,4 +1,4 @@
-# COoL-TEE: Resilient Decentralized Search against Front-Running Attacks
+# COoL-TEE: Resilient Decentralized Search against Information Front-Running Attacks
 
 This repository contains the code and scripts used to simulate and analyse the search and market systems considered in the COoL-TEE paper.
 

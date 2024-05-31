@@ -271,7 +271,7 @@ void send_request(ClientInfo& client, ServerInfo& server_info, JSON& request, in
     {
         std::lock_guard<std::mutex> lock(print_mutex);
         std::cout << client.name << ";" << request["ID"].ToInt() << ";"<< server_idx << ";" << start_time.time_since_epoch().count() << ";" << elapsed_seconds.count()<<std::endl;
-        
+#ifdef COOL
         int nbDataPoints=client.providerLatencies[server_idx].size();
         client.providerAvgLatency[server_idx]=(client.providerAvgLatency[server_idx]*nbDataPoints+elapsed_seconds.count())/(nbDataPoints+1);
         client.providerLatencies[server_idx].push_back(elapsed_seconds.count());
@@ -280,6 +280,7 @@ void send_request(ClientInfo& client, ServerInfo& server_info, JSON& request, in
         {
             updateRatios(client);
         }
+#endif
     }   
     std::string response(buffer.begin(), buffer.end());
     JSON jresp = JSON::Load(response);

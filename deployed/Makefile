@@ -1,3 +1,4 @@
+# Adapted from https://github.com/SJTU-IPADS/DeSearch/blob/main/sgx-executor/Makefile
 default: all
 
 .PHONY: deps
