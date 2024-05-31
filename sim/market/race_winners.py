@@ -551,12 +551,12 @@ if __name__ == "__main__":
     # <EXPERIMENT CONFIG>
     ###
 
-    EXP_DIR="wait100k2r375noLatByzRho"#"wait500ByzRho100"#"wait100noLatByzRho100"
+    EXP_DIR="wait100r75noLatByzRhoQatt"#"wait100r50noLatByzRho"#"wait100r50noLatByzRhoCuckooTiming"#"wait100r50noLatByzRhoCuckooContent"#"wait100k1r75noLatByzRhoCuckooContent"#"wait100kXrYnoLatByzRho"#"wait100k1r75noLatByzRhoCuckoo"#"wait100k2r75noLatByzRhoPoT"#"wait100k2r375noLatByzRho"#"wait500ByzRho100"#"wait100noLatByzRho100"
     
-    CONFIG_FILENAME="configs_8SP_wait100k2r375noLatByzRho"#"configs_8SP_wait500ByzRho100"#"configs_8SP_wait100noLatByzRho100"
+    CONFIG_FILENAME="configs_8SP_wait100k2r75noLatByzRhoQatt"#"configs_12SP_wait100r50noLatByzRho"#"configs_12SP_wait100r50noLatByzRhoCuckooTiming"#"configs_12SP_wait100r50noLatByzRhoCuckooContent"#"configs_8SP_wait100kXrYnoLatByzRho"#"configs_8SP_wait100k1r75noLatByzRhoCuckoo"#"configs_8SP_wait100k2r75noLatByzRhoPoT"#"configs_8SP_wait100k2r375noLatByzRho"#"configs_8SP_wait500ByzRho100"#"configs_8SP_wait100noLatByzRho100"
 
     EXP_SPECS=[
-            "noTEE",
+            #"noTEE",
             "WtA",#Winner takes all (assets)
             "sameDC",
             f"+{TIME_OFFSET}s"
@@ -593,63 +593,64 @@ if __name__ == "__main__":
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":2,"MAL_PROV":6},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":2,"MAL_PROV":6},
 
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
 
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
         ]
 
     conditions_list=[
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.875"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","37.5")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.875"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.875"),("rho","75"),("qAtt","true")],
 
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.75"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","37.5")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.75"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.75"),("rho","75"),("qAtt","true")],
 
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.625"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","37.5")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.625"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.625"),("rho","75"),("qAtt","true")],
 
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.5"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","37.5")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.5"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75"),("qAtt","true")],
 
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.375"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","37.5")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.375"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.375"),("rho","75"),("qAtt","true")],
 
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.25"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","37.5")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.25"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","75"),("qAtt","true")],
 
-                      [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.125"),("rho","37.5")],
-                      [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","37.5")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0.125"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","75"),("qAtt","true")],
 
-                      [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0"),("rho","37.5")],
-                      [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","37.5")],
-                    #   [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","37.5")],
-                     ]
+            # [("nReqs","100"),("hW","0ms"),("kErr","0"),("sHM","0"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","75"),("qAtt","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","75"),("qAtt","true")],
+       ]
+
     ###
     # </EXPERIMENT CONFIG>
     ###
 
-    RECOMPUTE=[0,1]
+    RECOMPUTE=[1]
     LEGACY_DATA_GEN=False
     
     if RQ_type==rl.RQ_types.First:
@@ -692,7 +693,7 @@ if __name__ == "__main__":
         samples=samples.values.tolist()
 
     for cond_idx, conditions in enumerate(conditions_list):
-        str_desc="-".join([EXP_DIR,*EXP_SPECS,*CONFIG_FILENAME.split("_")[1:],"nS="+str(NB_POISSON_SAMPLES),"rS="+str(ASSET_RATE),",".join([a+"="+b for a,b in conditions])]).replace("*","x")
+        str_desc="-".join([EXP_DIR,*EXP_SPECS,*CONFIG_FILENAME.split("_")[1:],"nS="+str(NB_POISSON_SAMPLES),"rS="+str(ASSET_RATE),",".join([a+"="+b for a,b in conditions])]).replace("*","x").replace("/","I")
         if 0 in RECOMPUTE:
             print("Conditions:", ",".join([a+"="+b for a,b in conditions]))
             agg_condition=None

@@ -16,7 +16,7 @@
 //
 // TODO generated message class
 //
-packet SourcedMsg {
+message SourcedMsg {
     int source;
     int ID;
     simtime_t time_send=-1;

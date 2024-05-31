@@ -152,11 +152,11 @@ void doParsimUnpacking(omnetpp::cCommBuffer *, T& t)
 
 Register_Class(DeadlineMsg)
 
-DeadlineMsg::DeadlineMsg(const char *name, short kind) : ::omnetpp::cPacket(name, kind)
+DeadlineMsg::DeadlineMsg(const char *name, short kind) : ::omnetpp::cMessage(name, kind)
 {
 }
 
-DeadlineMsg::DeadlineMsg(const DeadlineMsg& other) : ::omnetpp::cPacket(other)
+DeadlineMsg::DeadlineMsg(const DeadlineMsg& other) : ::omnetpp::cMessage(other)
 {
     copy(other);
 }
@@ -168,7 +168,7 @@ DeadlineMsg::~DeadlineMsg()
 DeadlineMsg& DeadlineMsg::operator=(const DeadlineMsg& other)
 {
     if (this == &other) return *this;
-    ::omnetpp::cPacket::operator=(other);
+    ::omnetpp::cMessage::operator=(other);
     copy(other);
     return *this;
 }
@@ -181,14 +181,14 @@ void DeadlineMsg::copy(const DeadlineMsg& other)
 
 void DeadlineMsg::parsimPack(omnetpp::cCommBuffer *b) const
 {
-    ::omnetpp::cPacket::parsimPack(b);
+    ::omnetpp::cMessage::parsimPack(b);
     doParsimPacking(b,this->ID);
     doParsimPacking(b,this->provider);
 }
 
 void DeadlineMsg::parsimUnpack(omnetpp::cCommBuffer *b)
 {
-    ::omnetpp::cPacket::parsimUnpack(b);
+    ::omnetpp::cMessage::parsimUnpack(b);
     doParsimUnpacking(b,this->ID);
     doParsimUnpacking(b,this->provider);
 }
@@ -251,7 +251,7 @@ class DeadlineMsgDescriptor : public omnetpp::cClassDescriptor
 
 Register_ClassDescriptor(DeadlineMsgDescriptor)
 
-DeadlineMsgDescriptor::DeadlineMsgDescriptor() : omnetpp::cClassDescriptor(omnetpp::opp_typename(typeid(DeadlineMsg)), "omnetpp::cPacket")
+DeadlineMsgDescriptor::DeadlineMsgDescriptor() : omnetpp::cClassDescriptor(omnetpp::opp_typename(typeid(DeadlineMsg)), "omnetpp::cMessage")
 {
     propertyNames = nullptr;
 }

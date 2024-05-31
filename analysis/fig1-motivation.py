@@ -60,12 +60,18 @@ RQ_type=rl.RQ_types.All
 COLUMN=("DIFF" if RELATIVE else END.name)
 INPUT_DIR="E:/wt"
 EXP_LIST=[
-        "wait100noLatByzRho100",
-        "wait100k2r375noLatByzRho",
+        "wait100r50noLatByzRhoCuckooContent",
+        "wait100r50noLatByzRhoRdm",
+        # "wait100k2r75noLatByzRhoPoT",
+        "wait100r50noLatByzRhoCuckooTiming",
+        "wait100r50noLatByzRho",
     ]
 CONFIG_FILENAME_LIST=[
-        "configs_8SP_wait100noLatByzRho100",
-        "configs_8SP_wait100k2r375noLatByzRho"
+        "configs_12SP_wait100r50noLatByzRhoCuckooContent",
+        "configs_12SP_wait100r50noLatByzRhoRdm",
+        # "configs_8SP_wait100k2r75noLatByzRhoPoT",
+        "configs_12SP_wait100r50noLatByzRhoCuckooTiming",
+        "configs_12SP_wait100r50noLatByzRho",
     ]
 
 BEHAVIOURS={"HON_CONS":1,"MAL_CONS":1,"HON_PROV":1,"MAL_PROV":0}
@@ -78,7 +84,9 @@ EXP_SPECS=[
                 "WtA",
                 "sameDC",
                 f"+{TIME_OFFSET}s"
-            ],
+            ]
+        ],
+        [
             [
                 "WtA",
                 "sameDC",
@@ -91,6 +99,13 @@ EXP_SPECS=[
                 "sameDC",
                 f"+{TIME_OFFSET}s"
             ]
+        ],
+        [
+            [
+                "WtA",
+                "sameDC",
+                f"+{TIME_OFFSET}s"
+            ],
         ],
     ]
 
@@ -102,22 +117,25 @@ RECOMPUTE=1
 
 conditions_list=[
         [
-            [    
-                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
+            [
+                [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","6I12"),("rho","50")],
             ],
+        ],
+        [
             [    
-                [("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75")],
-
-                [("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
-
-                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","6I12"),("rho","50")],
             ],
         ],
         [
             [
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","37.5")],
-            ]
-        ]
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","6I12"),("rho","50")],
+            ],
+        ],
+        [
+            [
+                [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","6I12"),("rho","50")],
+            ],
+        ],
     ]
 
 
@@ -153,16 +171,16 @@ legend_elements=[
 ]
 semi_flat_cond=[item for sublist in conditions_list for item in sublist]
 nb_cond=len([item for sublist in semi_flat_cond for item in sublist])
-total_nb_byz=8
+N_SP=12
 
 count=0
 
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers'],
-    'ATTACK_TYPE': ['without TEEs', 'random selection with~TEEs', 'COoL -TEE', 'Fault-free', 'PoT'],
-    **{(i,"hon"):np.ones(nb_cond)*2 for i in range(4,5)},
-    **{(i,"mal"):np.ones(nb_cond)*2 for i in range(4,5)},
-    **{(i,"err"):np.ones(nb_cond)*2 for i in range(4,5)},
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers'],
+    'ATTACK_TYPE': ['without TEEs', 'random selection with~TEEs', 'COoL -TEE', 'Fault-free'],
+    **{(i,"hon"):np.ones(nb_cond)*2 for i in range(N_SP//2,1+N_SP//2)},
+    **{(i,"mal"):np.ones(nb_cond)*2 for i in range(N_SP//2,1+N_SP//2)},
+    **{(i,"err"):np.ones(nb_cond)*2 for i in range(N_SP//2,1+N_SP//2)},
     }
 for k, exp_specs in enumerate(EXP_SPECS):
     for i, exp_spec in enumerate(exp_specs):
@@ -170,7 +188,8 @@ for k, exp_specs in enumerate(EXP_SPECS):
             str_desc="-".join([EXP_LIST[k],*exp_spec,*CONFIG_FILENAME_LIST[k].split("_")[1:],"nS="+str(NB_POISSON_SAMPLES),"rS="+str(ASSET_RATE),",".join([a+"="+b for a,b in conditions])]).replace("*","x")
             str_cond=",".join([a+"="+b for a,b in conditions])+"-"+",".join(exp_spec)
             readable_cond=str_cond.split("-")[0].replace("kErr=0.00001*10","LOoL").replace("kErr=0","rdm").replace("hW=","")+","+("noTEE" if str_cond.split("-")[1].split(",")[0]=="noTEE" else "TEE")
-            nbByz=8-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1])*8 if "sHM=" in readable_cond else 0)
+            #nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1])*N_SP if "sHM=" in readable_cond else 0)
+            nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1].split("I")[0]) if "sHM=" in readable_cond else 0)
             readable_cond=re.sub("sHM=[0-9.]+",str(nbByz)+"MalProv",readable_cond)
             full_dfs=pd.read_csv(f"{OUTPUT_DIR}/{str_desc}.csv", usecols=cols, index_col=idx_cols, low_memory=True)
             full_dfs["DIFF"]=full_dfs[END]-full_dfs[BEGIN]
@@ -201,11 +220,8 @@ for k, exp_specs in enumerate(EXP_SPECS):
             plt.errorbar(index+offset,mean_acq_behav["MAL_PROV"]+mean_acq_behav["HON_PROV"], yerr=std_acq_behav, fmt='none', ecolor='black', capsize=3)
 
             d[(nbByz,"hon")][count]=mean_acq_behav["HON_PROV"][False]
-            #d[(nbByz,"hon")][count//total_nb_byz+len(d[(nbByz,"hon")])//2]=mean_acq_behav["HON_PROV"][True]
             d[(nbByz,"mal")][count]=mean_acq_behav["MAL_PROV"][False]
-            #d[(nbByz,"mal")][count//total_nb_byz+len(d[(nbByz,"mal")])//2]=mean_acq_behav["MAL_PROV"][True]
             d[(nbByz,"err")][count]=std_acq_behav[False]
-            #d[(nbByz,"err")][count//total_nb_byz+len(d[(nbByz,"err")])//2]=std_acq_behav[True]
             count+=1
             multiplier+=1
 
@@ -296,7 +312,8 @@ legend_elements=[
 # Add legend using the labels and handles from the last subplot
 #fig.legend(handles=legend_elements, loc=(0.2, 0.8))
 #fig.tight_layout()
-filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-mal-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
+#filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-mal-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
+filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-mal-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)

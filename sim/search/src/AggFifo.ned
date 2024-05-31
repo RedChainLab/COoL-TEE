@@ -24,6 +24,7 @@ simple AggFifo extends AbstractFifo
         @class(AggFifo);
         int location_index @mutable;
         int offset=default(0);
+        bool malicious=default(false);
     gates:
         input in[];
         output out[];
