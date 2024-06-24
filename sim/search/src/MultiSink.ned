@@ -32,6 +32,8 @@ simple MultiSink extends AbstractSink
     	bool hardcodedRatios=default(false);
     	object hardcodedRatiosVec=default(nullptr);
     	
+    	bool t4ctful=default(false);
+    	
     	string outputPathPrefix;
     	string runPath;
     	

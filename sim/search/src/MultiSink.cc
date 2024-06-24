@@ -45,7 +45,11 @@ void MultiSink::handleMessage(cMessage *msg)
     SourcedMsg* smsg=check_and_cast<SourcedMsg *>(msg);
     // Set reception time in msg
     smsg->setTime_recv(simTime());
-    simtime_t lifetime = simTime() - msg->getCreationTime();
+    simtime_t lifetime = smsg->getTime_recv() - smsg->getTime_send();
+    if(this->par("t4ctful").boolValue())
+    {
+        lifetime-=0.999*(smsg->getTime_serv()-smsg->getTime_in());
+    }
 
     if(smsg->getTime_send().dbl()>=this->getAncestorPar("warmup").doubleValue())
     {
