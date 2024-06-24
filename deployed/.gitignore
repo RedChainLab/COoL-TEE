@@ -9,3 +9,5 @@ out/old
 out/*.png
 out/*.pdf
 *.7z
+out/secrets.mk
+out/config
