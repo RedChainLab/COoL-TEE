@@ -53,9 +53,11 @@ void handle_client(int client_socket, ServerInfo& server) {
 
         // Process request (example: echo the request)
         JSON response = request;
-
+        response["asset"]=1;
         // Send response
         std::string response_str = response.dump();
+        usleep(6250); // Sleep for 6.25ms to simulate processing time
+
         ssize_t bytes_written = write(client_socket, response_str.c_str(), response_str.size());
         if (bytes_written < 0) {
             std::cerr << "Error writing response to socket\n";
@@ -141,10 +143,6 @@ int main(int argc, char* argv[]) {
             std::cerr << "Error: " << e.what() << "\n";
             return 1;
         }
-    }
-
-    while (true) {
-        
     }
 
     return 0;

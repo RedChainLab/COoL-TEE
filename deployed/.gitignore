@@ -1,6 +1,8 @@
 deps
 out/client
 out/server
+out/mp
+out/recv
 *.o
 out/results*
 out/old

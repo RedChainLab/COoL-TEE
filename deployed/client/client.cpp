@@ -15,7 +15,7 @@
 #include <chrono>
 #include <set>
 #include <algorithm>
-
+#include <cassert>
 #include "json.hpp"
 
 using namespace json;
@@ -228,7 +228,18 @@ ssize_t readAll(int sock, std::vector<char> &buffer) {
     return totalRead;
 }
 
-void send_request(ClientInfo& client, ServerInfo& server_info, JSON& request, int server_idx)
+void acquire_asset(ClientInfo& client, int mp_sock, int asset)
+{
+    JSON request;
+    request["client"] = client.name;
+    request["asset"] = asset;
+
+    std::string request_str = request.dump();
+    std::cout << "Acquiring asset: " << request_str << std::endl;
+    send(mp_sock, request_str.c_str(), request_str.size(), 0);
+}
+
+void send_request(ClientInfo& client, ServerInfo& server_info, JSON& request, int server_idx, int mp_sock)
 {
     int sock = 0;
     struct sockaddr_in serv_addr;
@@ -284,10 +295,14 @@ void send_request(ClientInfo& client, ServerInfo& server_info, JSON& request, in
     }   
     std::string response(buffer.begin(), buffer.end());
     JSON jresp = JSON::Load(response);
+    std::cout << jresp.dump() << std::endl;
+    if (jresp["asset"].ToInt() >= 0) {
+        acquire_asset(client, mp_sock, jresp["asset"].ToInt());
+    }
     close(sock);
 }
 
-void send_requests(ClientInfo& client, std::vector<ServerInfo>& servers, const std::vector<int>& selected_servers) {
+void send_requests(ClientInfo& client, std::vector<ServerInfo>& servers, const std::vector<int>& selected_servers, int mp_sock) {
     static int rqID = 0;
 
     JSON request;
@@ -299,7 +314,7 @@ void send_requests(ClientInfo& client, std::vector<ServerInfo>& servers, const s
     for (int server_idx : selected_servers) {
         ServerInfo& server_info = servers[server_idx];
         server_info.stats.sentMsgCount++;
-        send_threads.emplace_back(send_request, std::ref(client), std::ref(server_info), std::ref(request), server_idx);
+        send_threads.emplace_back(send_request, std::ref(client), std::ref(server_info), std::ref(request), server_idx, std::ref(mp_sock));
     }
 
     for (auto& thread : send_threads) {
@@ -307,12 +322,8 @@ void send_requests(ClientInfo& client, std::vector<ServerInfo>& servers, const s
     }
 }
 
-int main(int argc, char* argv[]) {
-    if(argc != 8) {
-        std::cout << "USAGE: ./client <client-network-idx> <k-reqs> <kErr> <kD> <x1> <updateRatiosCount> <windowSize>" << std::endl;
-        return 1;
-    }
-
+int handle_rq_rsp(int argc, char* argv[], int mp_sock)
+{
     std::vector<ServerInfo> servers = read_server_info("./network.json");
 
     ClientInfo client;
@@ -333,12 +344,53 @@ int main(int argc, char* argv[]) {
     try {
         for (;;) {
             select_servers(client, selectedServers, servers);
-            send_requests(client, servers, selectedServers);
+            send_requests(client, servers, selectedServers, mp_sock);
         }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << "\n";
         return 1;
     }
+    return 0;
+}
+
+int setup_mp_connection(std::string hostname, int port)
+{
+    int mp_sock = 0;
+    struct sockaddr_in serv_addr;
+
+    if ((mp_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        std::cerr << "Socket creation error\n";
+        return -1;
+    }
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port);
+
+    if (inet_pton(AF_INET, resolve_hostname(hostname).c_str(), &serv_addr.sin_addr) <= 0) {
+        std::cerr << "Invalid address/ Address not supported\n";
+        close(mp_sock);
+        return -1;
+    }
+
+    if (connect(mp_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
+        std::cerr << "Connection failed\n";
+        close(mp_sock);
+        return -1;
+    }
+
+    return mp_sock;
+}
+
+int main(int argc, char* argv[]) {
+    if(argc != 8) {
+        std::cout << "USAGE: ./client <client-network-idx> <k-reqs> <kErr> <kD> <x1> <updateRatiosCount> <windowSize>" << std::endl;
+        return 1;
+    }
+
+    int mp_sock = setup_mp_connection("localhost",12340);
+    assert(mp_sock != -1);
+    std::thread rq_rsp_thread(handle_rq_rsp, argc, argv, std::ref(mp_sock));
+    rq_rsp_thread.join();
 
     return 0;
 }
