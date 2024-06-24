@@ -15,6 +15,13 @@ void receiver(const std::string& multicast_address, unsigned short multicast_por
         return;
     }
 
+    int reuse = 1;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&reuse, sizeof(reuse)) < 0) {
+        perror("setsockopt SO_REUSEADDR");
+        close(sockfd);
+        return;
+    }
+
     struct sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
@@ -31,7 +38,7 @@ void receiver(const std::string& multicast_address, unsigned short multicast_por
     mreq.imr_multiaddr.s_addr = inet_addr(multicast_address.c_str());
     mreq.imr_interface.s_addr = htonl(INADDR_ANY);
     if (setsockopt(sockfd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof(mreq)) < 0) {
-        perror("setsockopt");
+        perror("setsockopt IP_ADD_MEMBERSHIP");
         close(sockfd);
         return;
     }
@@ -65,7 +72,6 @@ int main() {
         std::cout << "Waiting for messages..." << std::endl;
         receiver(multicast_address, multicast_port);
     }
-
 
     return 0;
 }
