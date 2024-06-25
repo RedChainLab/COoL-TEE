@@ -24,11 +24,11 @@ src-group:
 	az group create --name ${SRC_GROUP} --location ${LOCATION}
 
 nsg:
-	az network nsg create --resource-group ${SRC_GROUP} --name ${PREFIX}${NSG_SUFFIX} --location ${LOCATION}
+	az network nsg create --resource-group ${SRC_GROUP} --name ${PREFIX}${NSG_SUFFIX}
 	az network nsg rule create --resource-group ${SRC_GROUP} --nsg-name ${PREFIX}${NSG_SUFFIX} --name allow-ip --protocol '*' --source-address-prefixes ${AUTHORIZED_IP} --destination-port-ranges '*' --priority 1000 --access Allow
 
 vnet:
-	az network vnet create --name ${VNET_NAME} --resource-group ${SRC_GROUP}  --address-prefixes 10.0.0.0/16 --location ${LOCATION}
+	az network vnet create --name ${VNET_NAME} --resource-group ${SRC_GROUP}  --address-prefixes 10.0.0.0/16
 	az network vnet subnet create --name ${PREFIX}market-${SUBNET_SUFFIX} --address-prefixes 10.0.0.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
 	az network vnet subnet create --name ${PREFIX}hon-prov-${SUBNET_SUFFIX} --address-prefixes 10.0.1.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
 	az network vnet subnet create --name ${PREFIX}mal-prov-${SUBNET_SUFFIX} --address-prefixes 10.0.2.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
@@ -40,7 +40,6 @@ new-market:
 	az vm create \
 		--resource-group ${SRC_GROUP} \
 		--name ${VM_NAME} \
-		--location ${LOCATION} \
 		--image Ubuntu2204 \
 		--size ${MARKET_VM_TYPE} \
 		--authentication-type ssh \
@@ -56,8 +55,7 @@ new-market:
 	az vm auto-shutdown \
   		--resource-group ${SRC_GROUP} \
   		--name ${VM_NAME} \
- 		--time 1800 \
-		--location ${LOCATION}
+ 		--time 1800
 
 del-%:
 	$(eval VM_NAME=${PREFIX}$(subst del-,,$@))
@@ -71,7 +69,6 @@ new-%-prov:
 	az vm create \
 		--resource-group ${SRC_GROUP} \
 		--name ${VM_NAME} \
-		--location ${LOCATION} \
 		--image Canonical:0001-com-ubuntu-server-focal:20_04-lts-gen2:latest \
 		--size ${PROVIDER_VM_TYPE} \
 		--authentication-type ssh \
@@ -86,15 +83,13 @@ new-%-prov:
 	az vm auto-shutdown \
   		--resource-group ${SRC_GROUP} \
   		--name ${VM_NAME} \
- 		--time 1800 \
-		--location ${LOCATION}
+ 		--time 1800
 
 new-%-req:
 	$(eval VM_NAME=${PREFIX}$(subst new-,,$@))
 	az vm create \
 		--resource-group ${SRC_GROUP} \
 		--name ${VM_NAME} \
-		--location ${LOCATION} \
 		--image Ubuntu2204 \
 		--size ${CONSUMER_VM_TYPE} \
 		--authentication-type ssh \
@@ -109,8 +104,16 @@ new-%-req:
 	az vm auto-shutdown \
   		--resource-group ${SRC_GROUP} \
   		--name ${VM_NAME} \
- 		--time 1800 \
-		--location ${LOCATION}
+ 		--time 1800
+
+del-src-group:
+	az group delete --name ${SRC_GROUP} --yes
+
+del-vnet:
+	az network vnet delete --name ${VNET_NAME} --resource-group ${SRC_GROUP}
+
+del-nsg:
+	az network nsg delete --name ${PREFIX}${NSG_SUFFIX} --resource-group ${SRC_GROUP}
 
 restart-%:
 	$(eval VM_NAME=${PREFIX}$(subst restart-,,$@))
