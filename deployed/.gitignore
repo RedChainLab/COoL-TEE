@@ -11,3 +11,4 @@ out/*.pdf
 *.7z
 out/secrets.mk
 out/config
+out/hosts

@@ -57,5 +57,5 @@ sudo apt-get update \
  && sudo apt-get install -y libsgx-urts-dbgsym libsgx-enclave-common-dbgsym libsgx-dcap-ql-dbgsym libsgx-dcap-default-qpl-dbgsym \
  && sudo apt-get install -y libsgx-*
 make deb_psw_pkg DEBUG=1
-sudo apt install ./linux/installer/deb/libsgx-urts/libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb
-source ${SDK_INSTALL_PATH_PREFIX}/sgxsdk/environment
+sudo apt install -y --allow-downgrades ./linux/installer/deb/libsgx-urts/libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb
+. ${SDK_INSTALL_PATH_PREFIX}/sgxsdk/environment

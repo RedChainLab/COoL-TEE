@@ -7,7 +7,7 @@ AUTHORIZED_IP?=IP
 PUB_KEY?=pathtokey.pub
 USER?=user
 
-PREFIX?=cool-tee-
+PREFIX?=cooltee-
 
 VNET_SUFFIX?=vnet
 SUBNET_SUFFIX?=subnet
@@ -25,7 +25,7 @@ src-group:
 
 nsg:
 	az network nsg create --resource-group ${SRC_GROUP} --name ${PREFIX}${NSG_SUFFIX}
-	az network nsg rule create --resource-group ${SRC_GROUP} --nsg-name ${PREFIX}${NSG_SUFFIX} --name allow-ip --protocol '*' --source-address-prefixes ${AUTHORIZED_IP} --destination-port-ranges '*' --priority 1000 --access Allow
+	az network nsg rule create --resource-group ${SRC_GROUP} --nsg-name ${PREFIX}${NSG_SUFFIX} --name allow-ip --destination-port-ranges '22' --priority 1000 --access Allow
 
 vnet:
 	az network vnet create --name ${VNET_NAME} --resource-group ${SRC_GROUP}  --address-prefixes 10.0.0.0/16
@@ -115,10 +115,26 @@ del-vnet:
 del-nsg:
 	az network nsg delete --name ${PREFIX}${NSG_SUFFIX} --resource-group ${SRC_GROUP}
 
+start-all: $(patsubst config/${PREFIX}%.json,start-%,$(wildcard config/*.json))
+
+stop-all: $(patsubst config/${PREFIX}%.json,stop-%,$(wildcard config/*.json))
+
+restart-all: $(patsubst config/${PREFIX}%.json,restart-%,$(wildcard config/*.json))
+
 restart-%:
 	$(eval VM_NAME=${PREFIX}$(subst restart-,,$@))
 	az vm restart --name ${VM_NAME} \
 		--resource-group ${SRC_GROUP} \
 		--force
 
-.PHONY: src-group vnet nsg
+start-%:
+	$(eval VM_NAME=${PREFIX}$(subst start-,,$@))
+	az vm start --name ${VM_NAME} \
+		--resource-group ${SRC_GROUP}
+
+stop-%:
+	$(eval VM_NAME=${PREFIX}$(subst stop-,,$@))
+	az vm stop --name ${VM_NAME} \
+		--resource-group ${SRC_GROUP}
+
+.PHONY: src-group vnet nsg start-all stop-all restart-all del-vnet del-nsg
