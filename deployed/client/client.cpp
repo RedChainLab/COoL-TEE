@@ -353,8 +353,13 @@ int handle_rq_rsp(int argc, char* argv[], int mp_sock)
     return 0;
 }
 
-int setup_mp_connection(std::string hostname, int port)
+int setup_mp_connection(filename)
 {
+    std::string file_content = read_file_to_string(filename);
+    JSON network_json = JSON::Load(file_content);
+    std::string hostname = network_json["market"]["hostname"].ToString();
+    int port = network_json["market"]["port"].ToInt();
+
     int mp_sock = 0;
     struct sockaddr_in serv_addr;
 
@@ -387,7 +392,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int mp_sock = setup_mp_connection("localhost",12340);
+    int mp_sock = setup_mp_connection("./network.json");
     assert(mp_sock != -1);
     std::thread rq_rsp_thread(handle_rq_rsp, argc, argv, std::ref(mp_sock));
     rq_rsp_thread.join();

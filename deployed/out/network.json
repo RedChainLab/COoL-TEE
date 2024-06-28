@@ -1,10 +1,15 @@
 {
     "servers":[
-        {"hostname": "<hostname|IP>", "port": 12345, "weight": 0.25},
-        {"hostname": "<hostname|IP>", "port": 12346, "weight": 0.25},
-        {"hostname": "<hostname|IP>", "port": 12347, "weight": 0.25},
-        {"hostname": "<hostname|IP>", "port": 12348, "weight": 0.25}
+        {"hostname": "cooltee-prov-hon-0", "port": 12345, "weight": 0.125},
+        {"hostname": "cooltee-prov-hon-0", "port": 12346, "weight": 0.125},
+        {"hostname": "cooltee-prov-hon-0", "port": 12347, "weight": 0.125},
+        {"hostname": "cooltee-prov-hon-0", "port": 12348, "weight": 0.125},
+        {"hostname": "cooltee-prov-mal-0", "port": 12345, "weight": 0.125},
+        {"hostname": "cooltee-prov-mal-0", "port": 12346, "weight": 0.125},
+        {"hostname": "cooltee-prov-mal-0", "port": 12347, "weight": 0.125},
+        {"hostname": "cooltee-prov-mal-0", "port": 12348, "weight": 0.125}
     ],
     "clients":[
-    ]
+    ],
+    "market":{"hostname": "cooltee-market", "port": 12340}
 }

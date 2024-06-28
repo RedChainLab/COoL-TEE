@@ -34,13 +34,23 @@ sudo apt-get update && sudo apt-get install -y \
         libsystemd0
 ### If you want to build it from sources
 git clone https://github.com/intel/linux-sgx.git && cd linux-sgx && git checkout sgx_${SDK_VERSION}
-make preparation
-if [ ${UBUNTU_NUM_VERSION} = 20.04 ] 
+if [ -f ../sgx_linux_x64_sdk_${SDK_VERSION}.${SDK_SUBVERSION}.bin && -f ../libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb ]
 then
-	sudo cp external/toolset/ubuntu20.04/* /usr/local/bin && which ar as ld objcopy objdump ranlib
+    echo "SDK installer and urts deb package are already present. Skipping preparation step."
+else
+    make preparation
+    if [ ${UBUNTU_NUM_VERSION} = 20.04 ] 
+    then
+        sudo cp external/toolset/ubuntu20.04/* /usr/local/bin && which ar as ld objcopy objdump ranlib
+    fi
 fi
-make sdk_install_pkg
-sudo ./linux/installer/bin/sgx_linux_x64_sdk_${SDK_VERSION}.${SDK_SUBVERSION}.bin --prefix ${SDK_INSTALL_PATH_PREFIX}
+if [ -f ../sgx_linux_x64_sdk_${SDK_VERSION}.${SDK_SUBVERSION}.bin ]
+then
+    ../sgx_linux_x64_sdk_${SDK_VERSION}.${SDK_SUBVERSION}.bin --prefix ${SDK_INSTALL_PATH_PREFIX}
+else
+    make sdk_install_pkg
+    sudo ./linux/installer/bin/sgx_linux_x64_sdk_${SDK_VERSION}.${SDK_SUBVERSION}.bin --prefix ${SDK_INSTALL_PATH_PREFIX}
+fi
 
 if [ ${UBUNTU_NUM_VERSION} = 20.04 ] 
 then
@@ -56,6 +66,12 @@ sudo apt-get update \
  && sudo apt-get install -y libsgx-epid libsgx-quote-ex libsgx-dcap-ql \
  && sudo apt-get install -y libsgx-urts-dbgsym libsgx-enclave-common-dbgsym libsgx-dcap-ql-dbgsym libsgx-dcap-default-qpl-dbgsym \
  && sudo apt-get install -y libsgx-*
-make deb_psw_pkg DEBUG=1
-sudo apt install -y --allow-downgrades ./linux/installer/deb/libsgx-urts/libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb
+if [ -f ../libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb ]
+then
+    sudo apt install -y --allow-downgrades ../libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb
+else
+    make deb_psw_pkg DEBUG=1
+    sudo apt install -y --allow-downgrades ./linux/installer/deb/libsgx-urts/libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb
+fi
 . ${SDK_INSTALL_PATH_PREFIX}/sgxsdk/environment
+echo ". ${SDK_INSTALL_PATH_PREFIX}/sgxsdk/environment" >> ~/.bashrc

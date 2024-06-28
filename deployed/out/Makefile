@@ -30,10 +30,12 @@ nsg:
 vnet:
 	az network vnet create --name ${VNET_NAME} --resource-group ${SRC_GROUP}  --address-prefixes 10.0.0.0/16
 	az network vnet subnet create --name ${PREFIX}market-${SUBNET_SUFFIX} --address-prefixes 10.0.0.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
-	az network vnet subnet create --name ${PREFIX}hon-prov-${SUBNET_SUFFIX} --address-prefixes 10.0.1.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
-	az network vnet subnet create --name ${PREFIX}mal-prov-${SUBNET_SUFFIX} --address-prefixes 10.0.2.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
-	az network vnet subnet create --name ${PREFIX}hon-req-${SUBNET_SUFFIX} --address-prefixes 10.0.3.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
-	az network vnet subnet create --name ${PREFIX}mal-req-${SUBNET_SUFFIX} --address-prefixes 10.0.4.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP} 
+	az network vnet subnet create --name ${PREFIX}prov-hon-${SUBNET_SUFFIX} --address-prefixes 10.0.1.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
+	az network vnet subnet create --name ${PREFIX}prov-mal-${SUBNET_SUFFIX} --address-prefixes 10.0.2.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
+	az network vnet subnet create --name ${PREFIX}req-hon-${SUBNET_SUFFIX} --address-prefixes 10.0.3.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP}
+	az network vnet subnet create --name ${PREFIX}req-mal-${SUBNET_SUFFIX} --address-prefixes 10.0.4.0/24 --nsg ${PREFIX}${NSG_SUFFIX} --vnet-name ${VNET_NAME} --resource-group ${SRC_GROUP} 
+
+new-all: $(patsubst config/${PREFIX}%.json,new-%,$(wildcard config/*.json))
 
 new-market:
 	$(eval VM_NAME=${PREFIX}$(subst new-,,$@))
@@ -50,22 +52,20 @@ new-market:
 		--vnet-name ${VNET_NAME} \
 		--subnet ${PREFIX}market-${SUBNET_SUFFIX} \
 		--public-ip-sku Standard \
-		--priority ${PRIORITY} \
 		> config/${VM_NAME}.json	
 	az vm auto-shutdown \
   		--resource-group ${SRC_GROUP} \
   		--name ${VM_NAME} \
  		--time 1800
+	echo "" > ~/.ssh/known_hosts
+	sleep 1
+	sudo sed -i "s/.*${VM_NAME}/$(shell jq -r '.publicIpAddress' config/${VM_NAME}.json)    ${VM_NAME}/g" /etc/hosts
+	sleep 1
+	scp -o StrictHostKeyChecking=no -r ../../deployed ${USER}@${VM_NAME}:/home/${USER}/${PREFIX}deployed
 
-del-%:
-	$(eval VM_NAME=${PREFIX}$(subst del-,,$@))
-	az vm delete --name ${VM_NAME} --resource-group ${SRC_GROUP} --yes
-	az network nic ip-config update --name ipconfig${VM_NAME} --nic-name ${VM_NAME}VMNic --resource-group ${SRC_GROUP} --remove publicIpAddress
-	az network public-ip delete --name ${VM_NAME}PublicIP --resource-group ${SRC_GROUP}
-	az network nic delete --name ${VM_NAME}VMNic --resource-group ${SRC_GROUP}
-	
-new-%-prov:
+new-prov-%:
 	$(eval VM_NAME=${PREFIX}$(subst new-,,$@))
+	$(eval ROLE=prov-$(word 3, $(subst -, ,$@)))
 	az vm create \
 		--resource-group ${SRC_GROUP} \
 		--name ${VM_NAME} \
@@ -77,16 +77,23 @@ new-%-prov:
 		--admin-username ${USER} \
 		--nsg ${PREFIX}${NSG_SUFFIX} \
 		--vnet-name ${VNET_NAME} \
-		--subnet ${VM_NAME}-${SUBNET_SUFFIX} \
+		--subnet ${PREFIX}${ROLE}-${SUBNET_SUFFIX} \
 		--public-ip-sku Standard \
 		> config/${VM_NAME}.json	
 	az vm auto-shutdown \
   		--resource-group ${SRC_GROUP} \
   		--name ${VM_NAME} \
  		--time 1800
+	echo "" > ~/.ssh/known_hosts
+	sleep 1
+	sudo sed -i "s/.*${VM_NAME}/$(shell jq -r '.publicIpAddress' config/${VM_NAME}.json)    ${VM_NAME}/g" /etc/hosts
+	sleep 1
+	scp -o StrictHostKeyChecking=no -r ../../deployed ${USER}@${VM_NAME}:/home/${USER}/${PREFIX}deployed
+	ssh ${USER}@${VM_NAME} "cd ~/${PREFIX}deployed/out && sh setup.sh"
 
-new-%-req:
+new-req-%:
 	$(eval VM_NAME=${PREFIX}$(subst new-,,$@))
+	$(eval ROLE=req-$(word 3, $(subst -, ,$@)))
 	az vm create \
 		--resource-group ${SRC_GROUP} \
 		--name ${VM_NAME} \
@@ -98,13 +105,18 @@ new-%-req:
 		--admin-username ${USER} \
 		--nsg ${PREFIX}${NSG_SUFFIX} \
 		--vnet-name ${VNET_NAME} \
-		--subnet ${VM_NAME}-${SUBNET_SUFFIX} \
+		--subnet ${PREFIX}${ROLE}-${SUBNET_SUFFIX} \
 		--public-ip-sku Standard \
 		> config/${VM_NAME}.json	 
 	az vm auto-shutdown \
   		--resource-group ${SRC_GROUP} \
   		--name ${VM_NAME} \
  		--time 1800
+	echo "" > ~/.ssh/known_hosts
+	sleep 1
+	sudo sed -i "s/.*${VM_NAME}/$(shell jq -r '.publicIpAddress' config/${VM_NAME}.json)    ${VM_NAME}/g" /etc/hosts
+	sleep 1
+	scp -o StrictHostKeyChecking=no -r ../../deployed ${USER}@${VM_NAME}:/home/${USER}/${PREFIX}deployed
 
 del-src-group:
 	az group delete --name ${SRC_GROUP} --yes
@@ -120,6 +132,15 @@ start-all: $(patsubst config/${PREFIX}%.json,start-%,$(wildcard config/*.json))
 stop-all: $(patsubst config/${PREFIX}%.json,stop-%,$(wildcard config/*.json))
 
 restart-all: $(patsubst config/${PREFIX}%.json,restart-%,$(wildcard config/*.json))
+
+del-all: $(patsubst config/${PREFIX}%.json,del-%,$(wildcard config/*.json))
+
+del-%:
+	$(eval VM_NAME=${PREFIX}$(subst del-,,$@))
+	az vm delete --name ${VM_NAME} --resource-group ${SRC_GROUP} --yes
+	az network nic ip-config update --name ipconfig${VM_NAME} --nic-name ${VM_NAME}VMNic --resource-group ${SRC_GROUP} --remove publicIpAddress
+	az network public-ip delete --name ${VM_NAME}PublicIP --resource-group ${SRC_GROUP}
+	az network nic delete --name ${VM_NAME}VMNic --resource-group ${SRC_GROUP}
 
 restart-%:
 	$(eval VM_NAME=${PREFIX}$(subst restart-,,$@))
@@ -137,4 +158,4 @@ stop-%:
 	az vm stop --name ${VM_NAME} \
 		--resource-group ${SRC_GROUP}
 
-.PHONY: src-group vnet nsg start-all stop-all restart-all del-vnet del-nsg
+.PHONY: src-group vnet nsg start-all stop-all restart-all del-vnet del-nsg del-all new-all

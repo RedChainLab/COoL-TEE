@@ -12,3 +12,4 @@ out/*.pdf
 out/secrets.mk
 out/config
 out/hosts
+id_rsa.pub
