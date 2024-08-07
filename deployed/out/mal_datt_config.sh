@@ -32,7 +32,7 @@ do
                 sudo iptables -t mangle -F MARK_PACKETS
                 sudo iptables -t mangle -D OUTPUT -j MARK_PACKETS
                 sudo iptables -t mangle -X MARK_PACKETS
-                echo "${YEL}Disabling found iptables configuration.${NC}"
+                echo "${YEL}Disabled found iptables configuration.${NC}"
             else
                 echo "${YEL}No iptables configuration found.${NC}"
             fi
