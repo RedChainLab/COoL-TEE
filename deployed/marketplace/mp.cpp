@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <netdb.h>
 #include "json.hpp"
+#include "config.h"
 
 using namespace json;
 
@@ -187,8 +188,6 @@ int listenToClients(int port)
 
 void handle_asset_gen()
 {
-    const std::string multicast_address = "239.255.0.1";
-    const unsigned short multicast_port = 30001;
     double lambda = 1.0; // Rate parameter for the exponential distribution
     int consumer_count = 3; // Number of consumer threads
 

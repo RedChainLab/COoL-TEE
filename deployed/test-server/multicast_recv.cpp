@@ -11,6 +11,8 @@
 #include <vector>
 #include <mutex>
 
+#include "config.h"
+
 using namespace json;
 
 int asset=-1;
@@ -230,8 +232,6 @@ int handle_clients(int argc, char* argv[])
 }
 
 int main(int argc, char* argv[]) {
-    const std::string multicast_address = "239.255.0.1";
-    const unsigned short multicast_port = 30001;
 
     std::thread asset_receiver_thread(receiver_loop, multicast_address, multicast_port);
     std::thread server_thread(handle_clients, argc, argv);

@@ -1,5 +1,4 @@
 cool:
-	g++ -o ../out/mp -Iinclude -pthread -std=c++17 -D COOL mp.cpp json.cpp
-
+	g++ -o ../out/mp -I../common -pthread -std=c++17 -D COOL mp.cpp ../common/json.cpp
 rdm:
-	g++ -o ../out/mp -Iinclude -pthread -std=c++17 mp.cpp json.cpp
+	g++ -o ../out/mp -I../common -pthread -std=c++17 mp.cpp ../common/json.cpp
