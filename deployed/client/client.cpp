@@ -353,7 +353,7 @@ int handle_rq_rsp(int argc, char* argv[], int mp_sock)
     return 0;
 }
 
-int setup_mp_connection(filename)
+int setup_mp_connection(std::string filename)
 {
     std::string file_content = read_file_to_string(filename);
     JSON network_json = JSON::Load(file_content);
