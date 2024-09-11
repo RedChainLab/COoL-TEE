@@ -99,18 +99,6 @@ void listenToClient(int client_socket)
 
             std::cout << "Received request from client: " << request.dump() << std::endl;
 
-            // Process request (example: echo the request)
-            JSON response = request;
-
-            // Send response
-            std::string response_str = response.dump();
-            usleep(6250); // Sleep for 6.25ms to simulate processing time
-
-            ssize_t bytes_written = write(client_socket, response_str.c_str(), response_str.size());
-            if (bytes_written < 0) {
-                std::cerr << "Error writing response to socket\n";
-            }
-
         } catch (const std::exception& e) {
             std::cerr << "Exception in handle_client: " << e.what() << "\n";
             // Close client socket on exception
