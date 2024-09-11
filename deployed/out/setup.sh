@@ -33,7 +33,8 @@ sudo apt-get update && sudo apt-get install -y \
         lsb-release \
         libsystemd0
 ### If you want to build it from sources
-git clone https://github.com/intel/linux-sgx.git && cd linux-sgx && git checkout sgx_${SDK_VERSION}
+git clone https://github.com/intel/linux-sgx.git
+cd linux-sgx && git checkout sgx_${SDK_VERSION}
 if [ -f ../sgx_linux_x64_sdk_${SDK_VERSION}.${SDK_SUBVERSION}.bin && -f ../libsgx-urts_${SDK_VERSION}.${SDK_SUBVERSION}-${UBUNTU_VERSION}1_amd64.deb ]
 then
     echo "SDK installer and urts deb package are already present. Skipping preparation step."
@@ -50,6 +51,7 @@ then
 else
     make sdk_install_pkg
     sudo ./linux/installer/bin/sgx_linux_x64_sdk_${SDK_VERSION}.${SDK_SUBVERSION}.bin --prefix ${SDK_INSTALL_PATH_PREFIX}
+    . ${SDK_INSTALL_PATH_PREFIX}/sgxsdk/environment
 fi
 
 if [ ${UBUNTU_NUM_VERSION} = 20.04 ] 
