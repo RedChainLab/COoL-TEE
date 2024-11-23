@@ -104,4 +104,4 @@ df_cloud_mat=df_cloud_mat[cloud_dict[CLOUD]]
 
 print(df_cloud_mat)
 
-df_cloud_mat.to_csv(f'{DATASET_DIR}/cloud-{CLOUD}-{USER}.csv')
+df_cloud_mat.to_csv(f'{DATASET_DIR}/cloud-{CLOUD}-{USER}.csv', sep='\t')
