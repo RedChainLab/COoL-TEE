@@ -96,18 +96,17 @@ void MultiSink::initialize()
     r3 = std::vector<double>(nSPs,1/double(nSPs));
     providerAvgLatency = std::vector<simtime_t>(nSPs,SimTime(-1));
     providerPrevAvgRelLatency = std::vector<double>(nSPs,0);
+    providerRatios = std::vector<double>(nSPs,1/double(nSPs));
     if(this->par("hardcodedRatios").boolValue())
     {
-        providerRatios = std::vector<double>(nSPs);
         Vector* vec = (Vector*)par("hardcodedRatiosVec").objectValue(); // e.g. "aa bb cc";
-        for(int i=0; i<nSPs; i++)
+        if(vec != nullptr)
         {
-            providerRatios[i]=vec->getVal(i);
+            for(int i=0; i<nSPs; i++)
+            {
+                providerRatios[i]=vec->getVal(i);
+            }
         }
-    }
-    else
-    {
-        providerRatios = std::vector<double>(nSPs,1/double(nSPs));
     }
     providerLatencies= std::vector<std::vector<simtime_t>>(nSPs,std::vector<simtime_t>());
     droppedJobs=std::vector<std::vector<simtime_t>>(nSPs,std::vector<simtime_t>());
@@ -179,9 +178,13 @@ Iterator dichotomic_search(Iterator start, Iterator end, const T &threshold) {
 void MultiSink::updateRatios()
 {
     int nSPs = this->getParentModule()->getSubmoduleVectorSize("fifos")+this->getParentModule()->getSubmoduleVectorSize("malSPs");
+    int nHonSPs = this->getParentModule()->getSubmoduleVectorSize("fifos");
 
     simtime_t bestLatency=SIMTIME_MAX;
-    for(int i=1; i<nSPs; i++)
+    bool shouldOnlyUpdateMalSPs=this->par("hardcodedRatios").boolValue()
+                                && this->getIndex() >= (int)(this->getParentModule()->getSubmoduleVectorSize("sources")*this->getAncestorPar("ratioRHM").doubleValue());
+
+    for(int i=shouldOnlyUpdateMalSPs?nHonSPs:0; i<nSPs; i++)
     {
         if(providerAvgLatency[i]>SIMTIME_ZERO && providerAvgLatency[i]<bestLatency)
         {
@@ -195,7 +198,7 @@ void MultiSink::updateRatios()
 
     std::vector<int> bestProviders;
     std::vector<int> outlierProviders;
-    for(int i=0; i<nSPs; i++)
+    for(int i=shouldOnlyUpdateMalSPs?nHonSPs:0; i<nSPs; i++)
     {
         if(providerAvgLatency[i]>SIMTIME_ZERO && providerAvgLatency[i]<=bestLatency+cluster_thresh)
         {
@@ -276,6 +279,13 @@ void MultiSink::updateRatios()
     {
         r3[i]*=(1-cluster_attrition);
         sum_outlier_r3+=r3[i];
+    }
+    if(shouldOnlyUpdateMalSPs)
+    {
+        for(int i=0; i<nHonSPs;i++)
+        {
+            sum_outlier_r3+=r3[i];
+        }
     }
     for(int i:bestProviders)
     {
