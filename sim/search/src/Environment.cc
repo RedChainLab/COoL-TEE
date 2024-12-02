@@ -202,7 +202,7 @@ void Environment::setSignals()
     {
         cModule* fifo = this->getParentModule()->getSubmodule("fifos", i);
 
-        for(int j=0; j<this->getParentModule()->getSubmoduleVectorSize("sinks");j++)
+        for(int j=0; j<this->getParentModule()->par("n_RH").intValue();j++)
         {
             MultiSink* sink = check_and_cast<MultiSink*>(this->getParentModule()->getSubmodule("sinks", j));
 
