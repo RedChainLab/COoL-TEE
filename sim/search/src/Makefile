@@ -39,6 +39,7 @@ OBJS = \
     $O/AbstractSource.o \
     $O/AggFifo.o \
     $O/AtlasEnv.o \
+    $O/CuckooEnv.o \
     $O/Environment.o \
     $O/Fifo.o \
     $O/HardCodedEnv.o \
