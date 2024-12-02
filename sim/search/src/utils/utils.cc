@@ -15,25 +15,37 @@
 
 #include "utils.h"
 
-std::vector<std::vector<double>> Utils::csv_to_matrix(std::string input_csv)
+std::vector<std::vector<double>> Utils::csv_to_matrix(std::string input_csv, bool ignore_header, bool ignore_index)
 {
     // Open the input file
     std::ifstream inputFile(input_csv);
     std::vector<std::vector<double>> matrix;
 
     // Read the file line by line
+    bool firstLine=true;
     std::string line;
     while (getline(inputFile, line)) {
         // Create a stringstream from the line
         std::stringstream lineStream(line);
-
+        if(firstLine && ignore_header)
+        {
+            firstLine=false;
+            continue;
+        }
         // Create a vector to hold the current row of the matrix
         std::vector<double> row;
 
         // Read the values from the line, separated by tabs
+        bool firstElement = true;
         double value;
         while (lineStream >> value) {
-            row.push_back(value);
+            if(firstElement && ignore_index)
+            {
+                firstElement=false;
+            }
+            else{
+                row.push_back(value);
+            }
 
             if (lineStream.peek() == '\t') {
                 lineStream.ignore();

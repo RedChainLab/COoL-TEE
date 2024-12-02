@@ -24,6 +24,8 @@ simple MultiSink extends AbstractSink
     	@class(MultiSink);
         int location_index @mutable;
     	int updateRatiosCount=default(1);
+    	double cluster_thresh @unit(s);
+    	double cluster_attrition;
     	double x1;
     	double kErr @mutable=default(0);
     	double kD @mutable=default(0);

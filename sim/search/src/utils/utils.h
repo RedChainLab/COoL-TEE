@@ -23,7 +23,7 @@
 
 class Utils {
 public:
-    static std::vector<std::vector<double>> csv_to_matrix(std::string input_csv);
+    static std::vector<std::vector<double>> csv_to_matrix(std::string input_csv, bool ignore_header=false, bool ignore_index=false);
 };
 
 #endif /* UTILS_UTILS_H_ */

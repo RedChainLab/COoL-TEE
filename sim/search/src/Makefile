@@ -38,6 +38,7 @@ OBJS = \
     $O/AbstractSink.o \
     $O/AbstractSource.o \
     $O/AggFifo.o \
+    $O/AtlasEnv.o \
     $O/Environment.o \
     $O/Fifo.o \
     $O/HardCodedEnv.o \
@@ -52,6 +53,7 @@ OBJS = \
     $O/Source.o \
     $O/utils/utils.o \
     $O/DeadlineMsg_m.o \
+    $O/IntVector_m.o \
     $O/LenMsg_m.o \
     $O/PoTMsg_m.o \
     $O/SourcedMsg_m.o \
@@ -60,6 +62,7 @@ OBJS = \
 # Message files
 MSGFILES = \
     DeadlineMsg.msg \
+    IntVector.msg \
     LenMsg.msg \
     PoTMsg.msg \
     SourcedMsg.msg \
