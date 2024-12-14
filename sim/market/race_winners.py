@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from alive_progress import alive_bar
 import math
+from multiprocessing import Pool
 
 pd.options.mode.chained_assignment = None  # default='warn'
 
@@ -568,14 +569,32 @@ if __name__ == "__main__":
         ]
 
     BEHAVIOURS=[
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":42,"MAL_PROV":6},
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":36,"MAL_PROV":12},
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":30,"MAL_PROV":18},
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":24,"MAL_PROV":24},
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":18,"MAL_PROV":30},
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":12,"MAL_PROV":36},
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":6,"MAL_PROV":42},
-        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":0,"MAL_PROV":48},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":42,"MAL_PROV":6},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":36,"MAL_PROV":12},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":30,"MAL_PROV":18},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":24,"MAL_PROV":24},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":18,"MAL_PROV":30},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":12,"MAL_PROV":36},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":6,"MAL_PROV":42},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":0,"MAL_PROV":48},
+
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":42,"MAL_PROV":6},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":36,"MAL_PROV":12},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":30,"MAL_PROV":18},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":24,"MAL_PROV":24},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":18,"MAL_PROV":30},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":12,"MAL_PROV":36},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":6,"MAL_PROV":42},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":0,"MAL_PROV":48},
+
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":42,"MAL_PROV":6},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":36,"MAL_PROV":12},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":30,"MAL_PROV":18},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":24,"MAL_PROV":24},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":18,"MAL_PROV":30},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":12,"MAL_PROV":36},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":6,"MAL_PROV":42},
+        {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":0,"MAL_PROV":48},
 
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":7,"MAL_PROV":1},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":7,"MAL_PROV":1},
@@ -619,32 +638,32 @@ if __name__ == "__main__":
         ]
 
     conditions_list=[
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","75"),("t4ct","false")],
 
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.875"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.75"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.625"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.5"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.375"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.25"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","false")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.875"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.75"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.625"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.5"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.375"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.25"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","false")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","false")],
 
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.875"),("rho","75"),("t4ct","true")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.75"),("rho","75"),("t4ct","true")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.625"),("rho","75"),("t4ct","true")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.5"),("rho","75"),("t4ct","true")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.375"),("rho","75"),("t4ct","true")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.25"),("rho","75"),("t4ct","true")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","true")],
-            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.875"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.75"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.625"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.5"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.375"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.25"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","true")],
+            [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","true")],
 
 
 
@@ -725,6 +744,8 @@ if __name__ == "__main__":
     # </EXPERIMENT CONFIG>
     ###
 
+    N_JOBS=int(sys.argv[1]) if len(sys.argv)>1 else 1
+
     RECOMPUTE=[0,1]
     LEGACY_DATA_GEN=False
     
@@ -767,7 +788,7 @@ if __name__ == "__main__":
         samples=pd.read_csv(samples_path, header=None)
         samples=samples.values.tolist()
 
-    for cond_idx, conditions in enumerate(conditions_list):
+    def generate(cond_idx, conditions):
         str_desc="-".join([EXP_DIR,*EXP_SPECS,*CONFIG_FILENAME.split("_")[1:],"nS="+str(NB_POISSON_SAMPLES),"rS="+str(ASSET_RATE),",".join([a+"="+b for a,b in conditions])]).replace("*","x").replace("/","I")
         if 0 in RECOMPUTE:
             print("Conditions:", ",".join([a+"="+b for a,b in conditions]))
@@ -814,4 +835,8 @@ if __name__ == "__main__":
 
         plot_data(full_dfs, str_desc)
         plt.close('all')
+
+    with Pool(N_JOBS) as pool:
+        pool.starmap(generate, enumerate(conditions_list))
+        
     #plt.show()
