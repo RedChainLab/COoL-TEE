@@ -524,7 +524,7 @@ def expectScore(dfs,expectancies, begin="SERVE", end="RECV"):
     return 1-(ar_diff.sum()/ar_max_diff.sum())
 
 if __name__ == "__main__":
-    TIME_INTERVAL=2400
+    TIME_INTERVAL=400
     ASSET_RATE=100
     MARKET_PERIOD=12
 
@@ -540,7 +540,7 @@ if __name__ == "__main__":
 
     COLUMN=("DIFF" if RELATIVE else END.name)
 
-    TIME_OFFSET=2250
+    TIME_OFFSET=250
 
     ###
     # <HIGH-LEVEL CONFIG>
@@ -556,9 +556,9 @@ if __name__ == "__main__":
     # <EXPERIMENT CONFIG>
     ###
 
-    EXP_DIR="wait1000r25ByzRhoPLAttr"#"wait100r75noLatByzRhoAttrCT"#"wait100r75noLatByzRhoAttr"#"wait2000r25Atlas"#"wait100r75noLatByzRhoCTT4CT+"#"wait100r75noLatByzRhoCTT4CT"#"wait100r75noLatByzRhoQatt"#"wait100r50noLatByzRho"#"wait100r50noLatByzRhoCuckooTiming"#"wait100r50noLatByzRhoCuckooContent"#"wait100k1r75noLatByzRhoCuckooContent"#"wait100kXrYnoLatByzRho"#"wait100k1r75noLatByzRhoCuckoo"#"wait100k2r75noLatByzRhoPoT"#"wait100k2r375noLatByzRho"#"wait500ByzRho100"#"wait100noLatByzRho100"
+    EXP_DIR="wait1000r75AtlasMC"#"wait1000r25ByzRhoPLAttr"#"wait100r75noLatByzRhoAttrCT"#"wait100r75noLatByzRhoAttr"#"wait2000r25Atlas"#"wait100r75noLatByzRhoCTT4CT+"#"wait100r75noLatByzRhoCTT4CT"#"wait100r75noLatByzRhoQatt"#"wait100r50noLatByzRho"#"wait100r50noLatByzRhoCuckooTiming"#"wait100r50noLatByzRhoCuckooContent"#"wait100k1r75noLatByzRhoCuckooContent"#"wait100kXrYnoLatByzRho"#"wait100k1r75noLatByzRhoCuckoo"#"wait100k2r75noLatByzRhoPoT"#"wait100k2r375noLatByzRho"#"wait500ByzRho100"#"wait100noLatByzRho100"
     
-    CONFIG_FILENAME="configs_8SP_wait1000ByzRhoPLAttr"#"configs_8SP_wait100k1r75noLatByzRhoAttrCT"#"configs_8SP_wait100k1r75noLatByzRhoAttr"#"configs_48SP_wait2000r25Atlas"#"configs_8SP_wait100k1r75noLatByzRhoCTT4CT+"#"configs_8SP_wait100k1r75noLatByzRhoCTT4CT"#"configs_8SP_wait100k2r75noLatByzRhoQatt"#"configs_12SP_wait100r50noLatByzRho"#"configs_12SP_wait100r50noLatByzRhoCuckooTiming"#"configs_12SP_wait100r50noLatByzRhoCuckooContent"#"configs_8SP_wait100kXrYnoLatByzRho"#"configs_8SP_wait100k1r75noLatByzRhoCuckoo"#"configs_8SP_wait100k2r75noLatByzRhoPoT"#"configs_8SP_wait100k2r375noLatByzRho"#"configs_8SP_wait500ByzRho100"#"configs_8SP_wait100noLatByzRho100"
+    CONFIG_FILENAME="configs_48SP_wait1000r75AtlasMC"#"configs_8SP_wait1000ByzRhoPLAttr"#"configs_8SP_wait100k1r75noLatByzRhoAttrCT"#"configs_8SP_wait100k1r75noLatByzRhoAttr"#"configs_48SP_wait2000r25Atlas"#"configs_8SP_wait100k1r75noLatByzRhoCTT4CT+"#"configs_8SP_wait100k1r75noLatByzRhoCTT4CT"#"configs_8SP_wait100k2r75noLatByzRhoQatt"#"configs_12SP_wait100r50noLatByzRho"#"configs_12SP_wait100r50noLatByzRhoCuckooTiming"#"configs_12SP_wait100r50noLatByzRhoCuckooContent"#"configs_8SP_wait100kXrYnoLatByzRho"#"configs_8SP_wait100k1r75noLatByzRhoCuckoo"#"configs_8SP_wait100k2r75noLatByzRhoPoT"#"configs_8SP_wait100k2r375noLatByzRho"#"configs_8SP_wait500ByzRho100"#"configs_8SP_wait100noLatByzRho100"
 
     EXP_SPECS=[
             #"noTEE",
@@ -568,14 +568,14 @@ if __name__ == "__main__":
         ]
 
     BEHAVIOURS=[
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":42,"MAL_PROV":6},
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":36,"MAL_PROV":12},
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":30,"MAL_PROV":18},
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":24,"MAL_PROV":24},
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":18,"MAL_PROV":30},
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":12,"MAL_PROV":36},
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":6,"MAL_PROV":42},
-        # {"HON_CONS":1000,"MAL_CONS":1000,"HON_PROV":0,"MAL_PROV":48},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":42,"MAL_PROV":6},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":36,"MAL_PROV":12},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":30,"MAL_PROV":18},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":24,"MAL_PROV":24},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":18,"MAL_PROV":30},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":12,"MAL_PROV":36},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":6,"MAL_PROV":42},
+        # {"HON_CONS":500,"MAL_CONS":500,"HON_PROV":0,"MAL_PROV":48},
 
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":7,"MAL_PROV":1},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":7,"MAL_PROV":1},
@@ -607,44 +607,44 @@ if __name__ == "__main__":
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":2,"MAL_PROV":6},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":2,"MAL_PROV":6},
 
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":1,"MAL_PROV":7},
 
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
-        {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
+        # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
         # {"HON_CONS":50,"MAL_CONS":50,"HON_PROV":0,"MAL_PROV":8},
         ]
 
     conditions_list=[
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","25"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.875"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.75"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.625"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.375"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.25"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","75"),("t4ct","false")],
 
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.875"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.75"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.625"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.5"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.375"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.25"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.125"),("rho","25"),("t4ct","false")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0"),("rho","25"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.875"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.75"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.625"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.5"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.375"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.25"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","false")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","false")],
 
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.875"),("rho","25"),("t4ct","true")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.75"),("rho","25"),("t4ct","true")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.625"),("rho","25"),("t4ct","true")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.5"),("rho","25"),("t4ct","true")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.375"),("rho","25"),("t4ct","true")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.25"),("rho","25"),("t4ct","true")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0.125"),("rho","25"),("t4ct","true")],
-            # [("nReqs","2000"),("hW","50ms"),("kErr","0.00001*2000"),("sHM","0"),("rho","25"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.875"),("rho","75"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.75"),("rho","75"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.625"),("rho","75"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.5"),("rho","75"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.375"),("rho","75"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.25"),("rho","75"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","true")],
+            # [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","true")],
 
 
 
@@ -672,13 +672,13 @@ if __name__ == "__main__":
             # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","25"),("t4ct","false")],
             # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.25"),("rho","25"),("t4ct","true")],
                         
-            [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","25"),("t4ct","false")],
-            [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","25"),("t4ct","false")],
-            [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","25"),("t4ct","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.125"),("rho","25"),("t4ct","false")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","25"),("t4ct","false")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.125"),("rho","25"),("t4ct","true")],
                         
-            [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","25"),("t4ct","false")],
-            [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","25"),("t4ct","false")],
-            [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","25"),("t4ct","true")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0"),("rho","25"),("t4ct","false")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","25"),("t4ct","false")],
+            # [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0"),("rho","25"),("t4ct","true")],
 
 
 

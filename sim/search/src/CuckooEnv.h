@@ -18,14 +18,14 @@
 
 #include <omnetpp.h>
 
-#include "HardCodedEnv.h"
+#include "Environment.h"
 
 using namespace omnetpp;
 
 /**
  * TODO - Generated class
  */
-class CuckooEnv : public HardCodedEnv
+class CuckooEnv : public Environment
 {
   protected:
     virtual void initialize(int stage) override;

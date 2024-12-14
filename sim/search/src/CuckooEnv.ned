@@ -18,7 +18,7 @@ package cooltee;
 //
 // TODO auto-generated module
 //
-simple CuckooEnv extends HardCodedEnv
+simple CuckooEnv extends Environment
 {
     parameters:
         @class(CuckooEnv);

@@ -18,7 +18,7 @@ package cooltee;
 //
 // TODO auto-generated type
 //
-simple AtlasEnv extends Environment
+simple AtlasEnv extends CuckooEnv
 {
     parameters:
         @class(AtlasEnv);

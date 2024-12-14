@@ -18,14 +18,14 @@
 
 #include <omnetpp.h>
 
-#include "Environment.h"
+#include "CuckooEnv.h"
 #include "IntVector_m.h"
 using namespace omnetpp;
 
 /**
  * TODO - Generated class
  */
-class AtlasEnv : public Environment
+class AtlasEnv : public CuckooEnv
 {
   protected:
     virtual void setDelayChannels() override;

@@ -91,11 +91,13 @@ void CuckooEnv::assignLoads()
             reqProvLoads[currReq][currProv]+=addedLoad;
         }
     }
+    std::cout<<"Provider remaining load"<<std::endl;
     for(auto load: provRemainingLoad)
     {
         std::cout<<load<<" ";
     }
     std::cout<<std::endl;
+    std::cout<<"Requester remaining load"<<std::endl;
     for(auto load: reqRemainingLoad)
     {
         std::cout<<load<<" ";
