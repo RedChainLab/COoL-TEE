@@ -3,7 +3,7 @@
 
 # In[ ]:
 
-from analysis.fig7_config import *
+from fig7_config import *
 
 # In[ ]:
 
@@ -11,8 +11,8 @@ count=0
 d={ 
     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers',],
-    'ATTACK_TYPE': [ 'sPoT $\\vert$ Queue-T (TEE)', 'COoL-PoT $\\vert$ Queue-T (TEE)', 'sPoT $\\vert$ Timing (TEE)', 'COoL-PoT $\\vert$ Timing (TEE)', 'COoL $\\vert$ Timing (TEE)', 'COoL $\\vert$ Fault-free',   
-                     'sPoT $\\vert$ Queue-T (TEE)', 'COoL-PoT $\\vert$ Queue-T (TEE)', 'sPoT $\\vert$ Timing (TEE)', 'COoL-PoT $\\vert$ Timing (TEE)', 'COoL $\\vert$ Timing (TEE)', 'COoL $\\vert$ Fault-free', ],
+    'ATTACK_TYPE': [ 'sPoT $\\vert$ Queue-D (TEE)', 'COoL-PoT $\\vert$ Queue-D (TEE)', 'sPoT $\\vert$ Delay (TEE)', 'COoL-PoT $\\vert$ Delay (TEE)', 'COoL $\\vert$ Delay (TEE)', 'COoL $\\vert$ Fault-free',   
+                     'sPoT $\\vert$ Queue-D (TEE)', 'COoL-PoT $\\vert$ Queue-D (TEE)', 'sPoT $\\vert$ Delay (TEE)', 'COoL-PoT $\\vert$ Delay (TEE)', 'COoL $\\vert$ Delay (TEE)', 'COoL $\\vert$ Fault-free', ],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -22,8 +22,8 @@ d={
 # d={ 
 #     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
 #                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-#     'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',
-#                     'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',],
+#     'ATTACK_TYPE': ['COoL Delay attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',
+#                     'COoL Delay attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack',],
 #     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
 #     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
 #     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -106,7 +106,7 @@ handles, _ = ax.get_legend_handles_labels()
 # ax.vlines(1,0,1, color="black")
 # ax.text(1.1,0.05,"$p_{exodus}^{cuckoo-T}$", ha="left")
 ax.vlines(4,0,1, color="black")
-ax.text(4.1,0.43,"$p_{exodus}^{timing}$", ha="left")
+ax.text(4.1,0.43,"$p_{exodus}^{delay}$", ha="left")
 
 ax.set_xlim(-1.5,7.5)
 ax.set_xticks(np.arange(-1,8))
@@ -120,7 +120,7 @@ ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
-legend=fig.legend(handles=[handles[0]]+[handles[2]]+[handles[1]]+handles[3:], bbox_to_anchor=(0.125, 0.44, 0.5, 0.5), labelspacing=0.2, fontsize="small",framealpha=0.7)
+legend=fig.legend(handles=[handles[0]]+[handles[2]]+[handles[1]]+handles[3:], bbox_to_anchor=(0.115, 0.44, 0.5, 0.5), labelspacing=0.2, handletextpad=0.25, fontsize="small",framealpha=0.0)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

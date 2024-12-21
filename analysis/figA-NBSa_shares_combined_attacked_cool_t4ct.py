@@ -12,8 +12,8 @@ count=0
 d={ 
     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-    'ATTACK_TYPE': ['COoL Timing attack', 'COoL Cuckoo-T attack', 'T4CT Timing attack', 'T4CT Cuckoo-T attack',
-                    'COoL Timing attack', 'COoL Cuckoo-T attack', 'T4CT Timing attack', 'T4CT Cuckoo-T attack'],
+    'ATTACK_TYPE': ['COoL w/o TT $\mid$ Delay', 'COoL w/o TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ Delay', 'COoL w/ TT $\mid$ Cuckoo-D',
+                    'COoL w/o TT $\mid$ Delay', 'COoL w/o TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ Delay', 'COoL w/ TT $\mid$ Cuckoo-D'],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -86,7 +86,7 @@ df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
 linestyles=["solid","dashed","solid","dashed"]
-colors=["crimson","coral","dodgerblue","tab:blue"]
+colors=["crimson","crimson","dodgerblue","tab:blue"]
 for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, linestyle=ls, color=cl, label=idx, yerr=err, ecolor='black', capsize=3)
@@ -104,7 +104,7 @@ ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
 handles, labels = ax.get_legend_handles_labels()
-legend=fig.legend(handles[2:]+handles[:2], labels, bbox_to_anchor=(0.11, 0.44, 0.5, 0.5), labelspacing=0.2, fontsize="small", framealpha=0.7)
+legend=fig.legend(handles[2:]+handles[:2], labels, bbox_to_anchor=(0.075, 0.45, 0.5, 0.5), labelspacing=0.2, fontsize="small", handletextpad=0.25, framealpha=0.0)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%H-%M-%S")
@@ -121,10 +121,10 @@ def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
 ax.grid(visible=False,which="both",axis="both")
 #export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
 
-ax.vlines(1,0.4,1, color="black")
-ax.text(1.1,0.43,"$p_{exodus}^{cuckoo-T}$", ha="left")
+ax.vlines(1,0.4,0.8, color="black")
+ax.text(1.1,0.43,"$p_{exodus}^{cuckoo-D}$", ha="left")
 ax.vlines(4,0.4,1, color="black")
-ax.text(4.1,0.43,"$p_{exodus}^{timing}$", ha="left")
+ax.text(4.1,0.43,"$p_{exodus}^{delay}$", ha="left")
 
 ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)

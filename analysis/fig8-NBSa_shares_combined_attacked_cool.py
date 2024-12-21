@@ -3,7 +3,7 @@
 
 # In[ ]:
 
-from analysis.fig8_config_attacked_cool import *
+from fig8_config_attacked_cool import *
 
 # In[ ]:
 
@@ -12,8 +12,8 @@ count=0
 d={ 
     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-    'ATTACK_TYPE': ['COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack', 'COoL Fault-free',
-                    'COoL Timing attack', 'COoL Content attack', 'COoL Cuckoo-T attack', 'COoL Cuckoo-C attack', 'COoL Fault-free'],
+    'ATTACK_TYPE': ['Delay (TEE)', 'Content (non-TEE)', 'Cuckoo-Delay (TEE)', 'Cuckoo-Content (non-TEE)', 'Fault-free',
+                    'Delay (TEE)', 'Content (non-TEE)', 'Cuckoo-Delay (TEE)', 'Cuckoo-Content (non-TEE)', 'Fault-free'],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -77,12 +77,6 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
-df=df.rename(index={'COoL Cuckoo-C attack':'Cuckoo-Content (non-TEE)'})
-df=df.rename(index={'COoL Cuckoo-T attack':'Cuckoo-Timing (TEE)'})
-df=df.rename(index={'COoL Timing attack':'Timing (TEE)'})
-df=df.rename(index={'COoL Content attack':'Content (non-TEE)'})
-df=df.rename(index={'COoL Fault-free':'Fault-free'})
-
 fig, ax = plt.subplots(figsize=(4.5,2.5))
 
 df.columns=df.columns.swaplevel(0,1)
@@ -110,7 +104,7 @@ ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
 handles, labels = ax.get_legend_handles_labels()
-legend=fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(0.11, 0.44, 0.5, 0.5), labelspacing=0.2, fontsize="small", framealpha=0.7)
+legend=fig.legend(handles[-2::-1]+[handles[-1]], labels[-2::-1]+[labels[-1]], bbox_to_anchor=(0.09, 0.44, 0.5, 0.5), labelspacing=0.2, fontsize="small", handletextpad=0.25, framealpha=0.0)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%H-%M-%S")
@@ -127,10 +121,10 @@ def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
 ax.grid(visible=False,which="both",axis="both")
 #export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
 
-ax.vlines(1,0.4,1, color="black")
-ax.text(1.1,0.43,"$p_{exodus}^{cuckoo-T}$", ha="left")
+ax.vlines(1,0.4,0.8, color="black")
+ax.text(1.1,0.43,"$p_{exodus}^{cuckoo-D}$", ha="left")
 ax.vlines(4,0.4,1, color="black")
-ax.text(4.1,0.43,"$p_{exodus}^{timing}$", ha="left")
+ax.text(4.1,0.43,"$p_{exodus}^{delay}$", ha="left")
 
 ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)

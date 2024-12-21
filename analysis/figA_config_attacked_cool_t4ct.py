@@ -61,16 +61,16 @@ RQ_type=rl.RQ_types.All
 COLUMN=("DIFF" if RELATIVE else END.name)
 INPUT_DIR="E:/wt"
 EXP_LIST=[
-        "wait100r75noLatByzRhoT4CT+",
-        "wait100r75noLatByzRhoCTT4CT+",
         "wait100noLatByzRho100",
         "wait100k1r75noLatByzRhoCuckoo",
+        "wait100r75noLatByzRhoT4CT+",
+        "wait100r75noLatByzRhoCTT4CT+",
     ]
 CONFIG_FILENAME_LIST=[
-        "configs_8SP_wait100k1r75noLatByzRhoT4CT+",
-        "configs_8SP_wait100k1r75noLatByzRhoCTT4CT+",
         "configs_8SP_wait100noLatByzRho100",
         "configs_8SP_wait100k1r75noLatByzRhoCuckoo",
+        "configs_8SP_wait100k1r75noLatByzRhoT4CT+",
+        "configs_8SP_wait100k1r75noLatByzRhoCTT4CT+",
     ]
 
 TIME_OFFSET=2250
@@ -79,20 +79,6 @@ EXP_SPECS=[
             [
                 "WtA",
                 "sameDC",
-                f"+{165}s"
-            ],
-        ],
-        [
-            [
-                "WtA",
-                "sameDC",
-                f"+{165}s"
-            ],
-        ],
-        [
-            [
-                "WtA",
-                "sameDC",
                 f"+{TIME_OFFSET}s"
             ],
         ],
@@ -101,6 +87,20 @@ EXP_SPECS=[
                 "WtA",
                 "sameDC",
                 f"+{TIME_OFFSET}s"
+            ],
+        ],
+        [
+            [
+                "WtA",
+                "sameDC",
+                f"+{165}s"
+            ],
+        ],
+        [
+            [
+                "WtA",
+                "sameDC",
+                f"+{165}s"
             ],
         ],
     ]

@@ -158,4 +158,9 @@ stop-%:
 	az vm stop --name ${VM_NAME} \
 		--resource-group ${SRC_GROUP}
 
+deallocate-%:
+	$(eval VM_NAME=${PREFIX}$(subst start-,,$@))
+	az vm deallocate --name ${VM_NAME} \
+		--resource-group ${SRC_GROUP}
+
 .PHONY: src-group vnet nsg start-all stop-all restart-all del-vnet del-nsg del-all new-all

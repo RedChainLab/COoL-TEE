@@ -3,7 +3,7 @@
 
 # In[ ]:
 
-from analysis.fig7_config_attacked_kX import *
+from fig7_config_attacked_kX import *
 
 # In[ ]:
 
@@ -13,22 +13,22 @@ d={
     'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers','Malicious consumers', 'Malicious consumers', #'Malicious consumers', 'Malicious consumers', 
                             'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', #'Honest consumers', 'Honest consumers', 
                             ],
-    'ATTACK_TYPE': ['Broadcast Timing attack', 
-                    #'rdm-k4 Timing attack', 
-                    #'COoL-k4 Timing attack', 
-                    'rdm-k2 Timing attack', 
-                    'COoL-k2 Timing attack', 
-                    'rdm-k1 Timing attack', 
-                    'COoL-k1 Timing attack', 
+    'ATTACK_TYPE': ['Broadcast $\\vert$ Delay (TEE)', 
+                    #'rdm-k4 Delay attack', 
+                    #'COoL-k4 Delay attack', 
+                    'DeSearch-like-k=2 $\\vert$ Delay (TEE)', 
+                    'COoL-k=2 $\\vert$ Delay (TEE)', 
+                    'DeSearch-like-k=1 $\\vert$ Delay (TEE)', 
+                    'COoL-k=1 $\\vert$ Delay (TEE)', 
                     'Fault-free',
-                    'Broadcast Timing attack', 
-                    #'rdm-k4 Timing attack', 
-                    #'COoL-k4 Timing attack', 
-                    'rdm-k2 Timing attack', 
-                    'COoL-k2 Timing attack', 
-                    'rdm-k1 Timing attack', 
-                    'COoL-k1 Timing attack', 
-                    'Fault-free'
+                    'Broadcast $\\vert$ Delay (TEE)', 
+                    #'rdm-k4 Delay attack', 
+                    #'COoL-k4 Delay attack', 
+                    'DeSearch-like-k=2 $\\vert$ Delay (TEE)', 
+                    'COoL-k=2 $\\vert$ Delay (TEE)', 
+                    'DeSearch-like-k=1 $\\vert$ Delay (TEE)', 
+                    'COoL-k=1 $\\vert$ Delay (TEE)', 
+                    'COoL-k=1 $\\vert$ Fault-free'
                 ],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -93,15 +93,6 @@ df.set_index(['CONSUMER_BEHAVIOUR', 'ATTACK_TYPE'], inplace=True)
 df=df[[df.columns[x//3+(x%3)*8] for x in range(24)]]
 df.columns = pd.MultiIndex.from_product([["MalProv"+str(i) for i in range(1,9)],["hon","mal","err"]])
 
-df=df.rename(index={'Broadcast Timing attack':'Broadcast $\\vert$ Timing (TEE)'})
-#df=df.rename(index={'rdm-k4 Timing attack':'DeSearch-like-k=4 $\\vert$ Timing (TEE)'})
-#df=df.rename(index={'COoL-k4 Timing attack':'COoL-k=4 $\\vert$ Timing (TEE)'})
-df=df.rename(index={'rdm-k2 Timing attack':'DeSearch-like-k=2 $\\vert$ Timing (TEE)'})
-df=df.rename(index={'COoL-k2 Timing attack':'COoL-k=2 $\\vert$ Timing (TEE)'})
-df=df.rename(index={'rdm-k1 Timing attack':'DeSearch-like-k=1 $\\vert$ Timing (TEE)'})
-df=df.rename(index={'COoL-k1 Timing attack':'COoL-k=1 $\\vert$ Timing (TEE)'})
-df=df.rename(index={'Fault-free':'COoL-k=1 $\\vert$ Fault-free'})
-
 fig, ax = plt.subplots(figsize=(4.5,2.5))
 
 df.columns=df.columns.swaplevel(0,1)
@@ -117,7 +108,7 @@ for ls, cl, (idx, row), (_, err) in zip(linestyles,colors, df2.iterrows(), dfErr
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, yerr=err, linestyle=ls, label=idx, color=cl, ecolor='black', capsize=3)
 
 ax.vlines(4,0.4,1, color="black")
-ax.text(4.1,0.43,"$p_{exodus}^{timing}$", ha="left")
+ax.text(4.1,0.43,"$p_{exodus}^{delay}$", ha="left")
 
 ax.set_xlim(-1.5,7.5)
 ax.set_xticks(np.arange(-1,8))
@@ -131,7 +122,7 @@ ax.grid(axis="x", which="major", alpha=1)
 ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
-legend=fig.legend( bbox_to_anchor=(0.195, 0.44, 0.5, 0.5), labelspacing=0.25, fontsize="small", framealpha=0.7)
+legend=fig.legend( bbox_to_anchor=(0.165, 0.45, 0.5, 0.5), labelspacing=0.25, handletextpad=0.25, fontsize="small", framealpha=0.0)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

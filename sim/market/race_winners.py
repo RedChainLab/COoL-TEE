@@ -746,7 +746,7 @@ if __name__ == "__main__":
 
     N_JOBS=int(sys.argv[1]) if len(sys.argv)>1 else 1
 
-    RECOMPUTE=[0,1]
+    RECOMPUTE=[0]
     LEGACY_DATA_GEN=False
     
     if RQ_type==rl.RQ_types.First:
@@ -833,8 +833,8 @@ if __name__ == "__main__":
             full_dfs=pd.read_csv(f"{OUTPUT_DIR}/{str_desc}.csv", usecols=cols, index_col=idx_cols, low_memory=True)
             print(f"Loaded data from {OUTPUT_DIR}/{str_desc}.csv")
 
-        plot_data(full_dfs, str_desc)
-        plt.close('all')
+            plot_data(full_dfs, str_desc)
+            plt.close('all')
 
     with Pool(N_JOBS) as pool:
         pool.starmap(generate, enumerate(conditions_list))

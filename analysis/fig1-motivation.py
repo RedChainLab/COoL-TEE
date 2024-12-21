@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 pd.options.mode.chained_assignment = None  # default='warn'
 
 from matplotlib.patches import Patch
+from datetime import datetime
 
 import sys
 import re
@@ -60,18 +61,20 @@ RQ_type=rl.RQ_types.All
 COLUMN=("DIFF" if RELATIVE else END.name)
 INPUT_DIR="E:/wt"
 EXP_LIST=[
-        "wait100r50noLatByzRhoCuckooContent",
-        "wait100r50noLatByzRhoRdm",
+        "wait100k1r75noLatByzRhoCuckooContent",
+        "wait100k1r75noLatByzRhoCuckoo",
+        "wait100kXrYnoLatByzRho",
         # "wait100k2r75noLatByzRhoPoT",
-        "wait100r50noLatByzRhoCuckooTiming",
-        "wait100r50noLatByzRho",
+        "wait100r75noLatByzRhoCTT4CT+",
+        "wait100noLatByzRho100",
     ]
 CONFIG_FILENAME_LIST=[
-        "configs_12SP_wait100r50noLatByzRhoCuckooContent",
-        "configs_12SP_wait100r50noLatByzRhoRdm",
+        "configs_8SP_wait100k1r75noLatByzRhoCuckooContent",
+        "configs_8SP_wait100k1r75noLatByzRhoCuckoo",
+        "configs_8SP_wait100kXrYnoLatByzRho",
         # "configs_8SP_wait100k2r75noLatByzRhoPoT",
-        "configs_12SP_wait100r50noLatByzRhoCuckooTiming",
-        "configs_12SP_wait100r50noLatByzRho",
+        "configs_8SP_wait100k1r75noLatByzRhoCTT4CT+",
+        "configs_8SP_wait100noLatByzRho100",
     ]
 
 BEHAVIOURS={"HON_CONS":1,"MAL_CONS":1,"HON_PROV":1,"MAL_PROV":0}
@@ -104,6 +107,13 @@ EXP_SPECS=[
             [
                 "WtA",
                 "sameDC",
+                f"+{165}s"
+            ],
+        ],
+        [
+            [
+                "WtA",
+                "sameDC",
                 f"+{TIME_OFFSET}s"
             ],
         ],
@@ -118,22 +128,27 @@ RECOMPUTE=1
 conditions_list=[
         [
             [
-                [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","6I12"),("rho","50")],
+                [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
+            ],
+        ],
+        [
+            [
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
             ],
         ],
         [
             [    
-                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","6I12"),("rho","50")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0"),("sHM","0.5"),("rho","75")],
             ],
         ],
         [
             [
-                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","6I12"),("rho","50")],
+                [("nReqs","100"),("hW","50ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75"),("t4ct","true")],
             ],
         ],
         [
             [
-                [("nReqs","100"),("hW","0ms"),("kErr","0.00001*100"),("sHM","6I12"),("rho","50")],
+                [("hW","0ms"),("kErr","0.00001*100"),("sHM","0.5"),("rho","75")],
             ],
         ],
     ]
@@ -171,13 +186,13 @@ legend_elements=[
 ]
 semi_flat_cond=[item for sublist in conditions_list for item in sublist]
 nb_cond=len([item for sublist in semi_flat_cond for item in sublist])
-N_SP=12
+N_SP=8
 
 count=0
 
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers'],
-    'ATTACK_TYPE': ['without TEEs', 'random selection with~TEEs', 'COoL -TEE', 'Fault-free'],
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers'],
+    'ATTACK_TYPE': ['without TEEs', 'latency- aware w/~TEEs, w/o~TT', 'random selection w/~TEEs', '\\emph{COoL-TEE} latency- aware w/~TT', 'Fault-free'],
     **{(i,"hon"):np.ones(nb_cond)*2 for i in range(N_SP//2,1+N_SP//2)},
     **{(i,"mal"):np.ones(nb_cond)*2 for i in range(N_SP//2,1+N_SP//2)},
     **{(i,"err"):np.ones(nb_cond)*2 for i in range(N_SP//2,1+N_SP//2)},
@@ -188,8 +203,8 @@ for k, exp_specs in enumerate(EXP_SPECS):
             str_desc="-".join([EXP_LIST[k],*exp_spec,*CONFIG_FILENAME_LIST[k].split("_")[1:],"nS="+str(NB_POISSON_SAMPLES),"rS="+str(ASSET_RATE),",".join([a+"="+b for a,b in conditions])]).replace("*","x")
             str_cond=",".join([a+"="+b for a,b in conditions])+"-"+",".join(exp_spec)
             readable_cond=str_cond.split("-")[0].replace("kErr=0.00001*10","LOoL").replace("kErr=0","rdm").replace("hW=","")+","+("noTEE" if str_cond.split("-")[1].split(",")[0]=="noTEE" else "TEE")
-            #nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1])*N_SP if "sHM=" in readable_cond else 0)
-            nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1].split("I")[0]) if "sHM=" in readable_cond else 0)
+            nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1])*N_SP if "sHM=" in readable_cond else 0)
+            #nbByz=N_SP-int(float(re.compile("sHM=[0-9.]+").search(readable_cond).group(0).split("=")[1].split("I")[0]) if "sHM=" in readable_cond else 0)
             readable_cond=re.sub("sHM=[0-9.]+",str(nbByz)+"MalProv",readable_cond)
             full_dfs=pd.read_csv(f"{OUTPUT_DIR}/{str_desc}.csv", usecols=cols, index_col=idx_cols, low_memory=True)
             full_dfs["DIFF"]=full_dfs[END]-full_dfs[BEGIN]
@@ -228,7 +243,6 @@ for k, exp_specs in enumerate(EXP_SPECS):
             legend_elements.append(Patch(facecolor="none",edgecolor='black', label=f'{readable_cond}'))
             print(f"Finished {readable_cond}")
 
-
 # In[ ]:
 
 
@@ -244,7 +258,7 @@ print(df)
 zones = df.index.levels[0]
 nplots = zones.size
 plots_width_ratios = [df.xs(zone).index.size for zone in zones]
-fig, axes = plt.subplots(nrows=1, ncols=nplots, sharey=True, figsize=(3.5, 2.5),
+fig, axes = plt.subplots(nrows=1, ncols=nplots, sharey=True, figsize=(5, 2.5),
                          gridspec_kw = dict(width_ratios=plots_width_ratios, wspace=0))
 
 # Loop through array of axes to create grouped bar chart for each factory zone
@@ -270,7 +284,7 @@ for zone, ax in zip(zones, [axes]):
     # Set and place x labels for factory zones
     #ax.set_xlabel(zone)
     ax.xaxis.set_label_coords(x=0.5, y=-0.215)
-    ax.yaxis.set_label_coords(x=-0.15, y=0)
+    ax.yaxis.set_label_coords(x=-0.125, y=0)
     # Format major tick labels for factory names: note that because this figure is
     # only about 10 inches wide, I choose to rewrite the long names on two lines.
     ticklabels = [name.replace(' ', '\n') if len(name) > 8 else name
@@ -296,15 +310,15 @@ for zone, ax in zip(zones, [axes]):
     ax.set_yticks(np.arange(0,1.01,0.02),minor=True)
     ax.grid(axis="y", which="major", alpha=1)
     ax.grid(axis="y", which="minor", alpha=0.25)
-    ax.hlines(0.5,-1,3.75,linestyles="dashed",colors="black")
+    ax.hlines(0.5,-1,4.75,linestyles="dashed",colors="black")
     ax.arrow(-.625,0.5,0,0.25,head_width=0.05,head_length=0.05,fc='k',ec='k')
     ax.arrow(-.625,0.5,0,-0.25,head_width=0.05,head_length=0.05,fc='k',ec='k')
     ax.text(-.75,0.75,"Advantage",ha="center",va="center", rotation=90)
     ax.text(-.75,0.25,"Disadvantage",ha="center",va="center", rotation=90)
     ax.set_ylim(0,1)
-    ax.set_xlim(-1,3.5)
-    ax.text(1.1,0.225,"DeSearch-like\nsystems",ha="center",va="center",rotation=65)
-    ax.text(2,0.25,"proposed \n solution",ha="center",va="center",rotation=65)
+    ax.set_xlim(-1,4.5)
+    ax.text(2.1,0.225,"DeSearch-like\nsystems",ha="center",va="center",rotation=55)
+    ax.text(3,0.25,"proposed \n solution",ha="center",va="center",rotation=0)
 legend_elements=[
     Patch(facecolor="lightskyblue",edgecolor='black', label='Discovered through honest providers'),
     Patch(facecolor="crimson",edgecolor='black', label='Discovered through by malicious providers'),
@@ -313,7 +327,8 @@ legend_elements=[
 #fig.legend(handles=legend_elements, loc=(0.2, 0.8))
 #fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-mal-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
-filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-mal-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
+current_time=datetime.now().strftime("%H-%M-%S")
+filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-mal-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}-{current_time}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
