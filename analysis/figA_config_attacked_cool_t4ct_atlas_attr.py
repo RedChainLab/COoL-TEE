@@ -62,13 +62,21 @@ COLUMN=("DIFF" if RELATIVE else END.name)
 INPUT_DIR="E:/wt"
 EXP_LIST=[
         "wait1000r75AtlasMC",
+        "wait1000r75AtlasMCFF",
     ]
 CONFIG_FILENAME_LIST=[
         "configs_48SP_wait1000r75AtlasMC",
+        "configs_48SP_wait1000r75AtlasMCFF",
     ]
 
 TIME_OFFSET=2250
 EXP_SPECS=[
+        [
+            [
+                "WtA",
+                f"+{250}s"
+            ],
+        ],
         [
             [
                 "WtA",
@@ -113,7 +121,19 @@ conditions_list=[
                 [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","true")],
                 [("nReqs","1000"),("hW","50ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","true")],
             ],
-        ]
+        ],
+        [
+            [
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0.875"),("rho","75"),("t4ct","true")],
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0.75"),("rho","75"),("t4ct","true")],
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0.625"),("rho","75"),("t4ct","true")],   
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0.5"),("rho","75"),("t4ct","true")],
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0.375"),("rho","75"),("t4ct","true")],
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0.25"),("rho","75"),("t4ct","true")],
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0.125"),("rho","75"),("t4ct","true")],
+                [("nReqs","1000"),("hW","0ms"),("kErr","0.00001*1000"),("sHM","0"),("rho","75"),("t4ct","true")],
+            ],
+        ],
     ]
 
 idx_cols=["MARKET_REPETITION","REPETITION","CONSUMER_BEHAVIOUR","CONSUMER_ID","PROVIDER_BEHAVIOUR","PROVIDER_ID","REQUEST_ID"]

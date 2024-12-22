@@ -10,11 +10,11 @@ from figA_config_attacked_cool_t4ct_atlas_attr import *
 count=0
 # Attacked COoL
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
-                            'Honest consumers', 'Honest consumers', 'Honest consumers'
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
+                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'
                             ],
-    'ATTACK_TYPE': ['DeSearch-like', 'COoL-TEE w/o TT', 'COoL-TEE w/ TT',
-                    'DeSearch-like', 'COoL-TEE w/o TT', 'COoL-TEE w/ TT'  ],
+    'ATTACK_TYPE': ['DeSearch-like', 'COoL-TEE w/o TT', 'COoL-TEE w/ TT', 'COoL-TEE w/ TT $\\mid FF$',
+                    'DeSearch-like', 'COoL-TEE w/o TT', 'COoL-TEE w/ TT', 'COoL-TEE w/ TT $\\mid FF$'  ],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -86,8 +86,8 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["solid","dashed","dashed","dashed", "dashed", "dashed"]
-colors=["indigo","tab:blue","crimson","crimson", "coral", "dodgerblue"]
+linestyles=["solid","dashed","dashed",(0,(1,1)), "dashed", "dashed"]
+colors=["indigo","tab:blue","crimson","tab:brown", "coral", "dodgerblue"]
 for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
     ax.errorbar(["$\\frac{"+str(6*(i+1))+"}{48}$" for i in range(0,8)], row, linestyle=ls, color=cl, label=idx, yerr=err, ecolor='black', capsize=3)
@@ -105,8 +105,8 @@ ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
 handles, labels = ax.get_legend_handles_labels()
-labels=["DeSearch-like","COoL w/o TT","COoL w/ TT"]
-legend=fig.legend(handles, labels, bbox_to_anchor=(-0.07, 0.44, 0.5, 0.5), labelspacing=0.2, handletextpad=0.25, fontsize="small", framealpha=0.0)
+labels=["DeSearch-like","COoL w/o TT","COoL w/ TT", "Fault-Free"]
+legend=fig.legend(handles, labels, bbox_to_anchor=(-0.065, 0.44, 0.5, 0.5), labelspacing=0.2, handletextpad=0.25, fontsize="small", framealpha=0.0)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%H-%M-%S")
@@ -132,9 +132,9 @@ ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
 ax.grid(axis="x", which="major", alpha=1)
 #legend.remove()
+filename=f"G:/figs/cool_t4ct-atlas-{current_time}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
 
 # %%
-

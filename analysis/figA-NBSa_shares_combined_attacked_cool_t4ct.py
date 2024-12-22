@@ -10,10 +10,10 @@ from figA_config_attacked_cool_t4ct import *
 count=0
 # Attacked COoL
 d={ 
-    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 
-                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
-    'ATTACK_TYPE': ['COoL w/o TT $\mid$ Delay', 'COoL w/o TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ Delay', 'COoL w/ TT $\mid$ Cuckoo-D',
-                    'COoL w/o TT $\mid$ Delay', 'COoL w/o TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ Delay', 'COoL w/ TT $\mid$ Cuckoo-D'],
+    'CONSUMER_BEHAVIOUR': ['Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers', 'Malicious consumers',
+                            'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers', 'Honest consumers'],
+    'ATTACK_TYPE': ['COoL w/o TT $\mid$ Delay', 'COoL w/o TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ Delay', 'COoL w/ TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ F-Free',
+                    'COoL w/o TT $\mid$ Delay', 'COoL w/o TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ Delay', 'COoL w/ TT $\mid$ Cuckoo-D', 'COoL w/ TT $\mid$ F-Free'],
     **{(i,"hon"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"mal"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
     **{(i,"err"):np.ones(2*nb_cond//8)*2 for i in range(1,9)},
@@ -85,8 +85,8 @@ df.columns=df.columns.swaplevel(0,1)
 df2=df.loc["Malicious consumers"]["hon"]+df.loc["Malicious consumers"]["mal"]
 dfErr=df.loc["Malicious consumers"]["err"]
 
-linestyles=["solid","dashed","solid","dashed"]
-colors=["crimson","crimson","dodgerblue","tab:blue"]
+linestyles=["solid","dashed","solid","dashed",(0,(1,1))]
+colors=["dodgerblue","tab:blue","crimson","crimson","tab:brown"]
 for ls,cl, (idx, row), (_,err) in zip(linestyles, colors, df2.iterrows(), dfErr.iterrows()):
     print(row)
     ax.errorbar([f"$\\frac{i+1}{8}$" for i in range(0,8)], row, linestyle=ls, color=cl, label=idx, yerr=err, ecolor='black', capsize=3)
@@ -104,7 +104,7 @@ ax.set_xlabel(f"Fraction of malicious providers $p_M$")
 ax.set_ylabel(f"Malicious share of dNBS-assets")
 
 handles, labels = ax.get_legend_handles_labels()
-legend=fig.legend(handles[2:]+handles[:2], labels, bbox_to_anchor=(0.075, 0.45, 0.5, 0.5), labelspacing=0.2, fontsize="small", handletextpad=0.25, framealpha=0.0)
+legend=fig.legend(handles, labels, bbox_to_anchor=(0.075, 0.45, 0.5, 0.5), labelspacing=0.2, fontsize="small", handletextpad=0.25, framealpha=0.0)
 fig.tight_layout()
 #filename=f"{FIGS_DIR}/{','.join(EXP_LIST)}-{str_specs}-acqshare-cons-behav-prov-behav-werr_{step}-{BEGIN}-{END}-{str_vals}.pdf"
 current_time=datetime.now().strftime("%H-%M-%S")
@@ -121,7 +121,7 @@ def export_legend(legend, filename="legend.png", expand=[-5,-5,5,5]):
 ax.grid(visible=False,which="both",axis="both")
 #export_legend(legend,f"{filename[:-4]+'-leg.pdf'}")
 
-ax.vlines(1,0.4,0.8, color="black")
+ax.vlines(1,0.4,0.75, color="black")
 ax.text(1.1,0.43,"$p_{exodus}^{cuckoo-D}$", ha="left")
 ax.vlines(4,0.4,1, color="black")
 ax.text(4.1,0.43,"$p_{exodus}^{delay}$", ha="left")
@@ -130,6 +130,8 @@ ax.grid(axis="y", which="major", alpha=1)
 ax.grid(axis="y", which="minor", alpha=0.3)
 ax.grid(axis="x", which="major", alpha=1)
 #legend.remove()
+
+filename=f"G:/figs/cool_t4ct-{current_time}.pdf"
 plt.savefig(filename, transparent=True, dpi=1000, bbox_inches='tight')
 print(f"Saved {filename}")
 #fig.suptitle('Production Quantity by Zone and Factory on both days', y=1.02, size=14)
