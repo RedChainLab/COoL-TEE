@@ -1,0 +1,1 @@
+grep "Inter" $1 | cut -d " " -f 5- | tr -d " " | tr -d "." > $2

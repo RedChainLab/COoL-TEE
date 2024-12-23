@@ -1,0 +1,9 @@
+triad
+server
+fig
+*.signed.so
+*.so
+*.o
+*.tar.gz
+libsodium-*
+out
