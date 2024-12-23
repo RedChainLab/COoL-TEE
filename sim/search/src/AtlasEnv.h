@@ -13,17 +13,22 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef UTILS_UTILS_H_
-#define UTILS_UTILS_H_
+#ifndef __FAIRFETCHED_OMNETPP_HARDCODEDENV_H_
+#define __FAIRFETCHED_OMNETPP_HARDCODEDENV_H_
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
+#include <omnetpp.h>
 
-class Utils {
-public:
-    static std::vector<std::vector<double>> csv_to_matrix(std::string input_csv, bool ignore_header=false, bool ignore_index=false);
+#include "CuckooEnv.h"
+#include "IntVector_m.h"
+using namespace omnetpp;
+
+/**
+ * TODO - Generated class
+ */
+class AtlasEnv : public CuckooEnv
+{
+  protected:
+    virtual void setDelayChannels() override;
 };
 
-#endif /* UTILS_UTILS_H_ */
+#endif

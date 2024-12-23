@@ -13,17 +13,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef UTILS_UTILS_H_
-#define UTILS_UTILS_H_
+#ifndef __COOL_TEE_CUCKOOENV_H_
+#define __COOL_TEE_CUCKOOENV_H_
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
+#include <omnetpp.h>
 
-class Utils {
-public:
-    static std::vector<std::vector<double>> csv_to_matrix(std::string input_csv, bool ignore_header=false, bool ignore_index=false);
+#include "Environment.h"
+
+using namespace omnetpp;
+
+/**
+ * TODO - Generated class
+ */
+class CuckooEnv : public Environment
+{
+  protected:
+    virtual void initialize(int stage) override;
+    virtual void assignLoads();
 };
 
-#endif /* UTILS_UTILS_H_ */
+#endif

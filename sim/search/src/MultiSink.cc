@@ -45,7 +45,11 @@ void MultiSink::handleMessage(cMessage *msg)
     SourcedMsg* smsg=check_and_cast<SourcedMsg *>(msg);
     // Set reception time in msg
     smsg->setTime_recv(simTime());
-    simtime_t lifetime = simTime() - msg->getCreationTime();
+    simtime_t lifetime = smsg->getTime_recv() - smsg->getTime_send();
+    if(this->par("t4ctful").boolValue())
+    {
+        lifetime-=0.999*(smsg->getTime_serv()-smsg->getTime_in());
+    }
 
     if(smsg->getTime_send().dbl()>=this->getAncestorPar("warmup").doubleValue())
     {
@@ -84,24 +88,25 @@ void MultiSink::initialize()
 
     updateRatiosCount=par("updateRatiosCount");
     x1=par("x1");
+    cluster_thresh=par("cluster_thresh");
+    cluster_attrition=par("cluster_attrition");
 
     int nSPs = this->getParentModule()->getSubmoduleVectorSize("fifos")+this->getParentModule()->getSubmoduleVectorSize("malSPs");
 
     r3 = std::vector<double>(nSPs,1/double(nSPs));
-    providerAvgLatency = std::vector<simtime_t>(nSPs,SIMTIME_ZERO);
+    providerAvgLatency = std::vector<simtime_t>(nSPs,SimTime(-1));
     providerPrevAvgRelLatency = std::vector<double>(nSPs,0);
+    providerRatios = std::vector<double>(nSPs,1/double(nSPs));
     if(this->par("hardcodedRatios").boolValue())
     {
-        providerRatios = std::vector<double>(nSPs);
         Vector* vec = (Vector*)par("hardcodedRatiosVec").objectValue(); // e.g. "aa bb cc";
-        for(int i=0; i<nSPs; i++)
+        if(vec != nullptr)
         {
-            providerRatios[i]=vec->getVal(i);
+            for(int i=0; i<nSPs; i++)
+            {
+                providerRatios[i]=vec->getVal(i);
+            }
         }
-    }
-    else
-    {
-        providerRatios = std::vector<double>(nSPs,1/double(nSPs));
     }
     providerLatencies= std::vector<std::vector<simtime_t>>(nSPs,std::vector<simtime_t>());
     droppedJobs=std::vector<std::vector<simtime_t>>(nSPs,std::vector<simtime_t>());
@@ -173,98 +178,124 @@ Iterator dichotomic_search(Iterator start, Iterator end, const T &threshold) {
 void MultiSink::updateRatios()
 {
     int nSPs = this->getParentModule()->getSubmoduleVectorSize("fifos")+this->getParentModule()->getSubmoduleVectorSize("malSPs");
-#if LOG
-    EV<<"AvgLat ";
-    std::copy(providerAvgLatency.begin(), providerAvgLatency.end(), std::ostream_iterator<simtime_t>(EV, " "));
-    EV<<std::endl;
-#endif
-    int windowSize=par("windowSize").intValue();//100;
-    auto itBegin = providerAvgLatency.size()>=windowSize?providerAvgLatency.end()-9:providerAvgLatency.begin();
-    simtime_t sum = std::accumulate(itBegin, providerAvgLatency.end(), SIMTIME_ZERO);
-    simtime_t Dt = sum / std::min(int(providerAvgLatency.size()),windowSize);//providerAvgLatency.size();
-#if LOG
-    EV<<"AvgLat Avg "<<Dt<<std::endl;
+    int nHonSPs = this->getParentModule()->getSubmoduleVectorSize("fifos");
 
-    EV<<"Drop ";
-#endif
-    simtime_t dropTimeWindow=simTime()-SimTime(60);
+    simtime_t bestLatency=SIMTIME_MAX;
+    bool shouldOnlyUpdateMalSPs=this->par("hardcodedRatios").boolValue()
+                                && this->getIndex() >= (int)(this->getParentModule()->getSubmoduleVectorSize("sources")*this->getAncestorPar("ratioRHM").doubleValue());
 
-    std::vector<int> dropped = std::vector<int>(nSPs,0);
-    int sumDropped =0;
-    int i=0;
-    for (auto it=droppedJobs.cbegin();it!=droppedJobs.cend();it++)
+    for(int i=shouldOnlyUpdateMalSPs?nHonSPs:0; i<nSPs; i++)
     {
-        auto begin = dichotomic_search(it->cbegin(),it->cend(),dropTimeWindow);
-        sumDropped+=std::distance(begin, it->cend());
-        dropped[i]=std::distance(begin, it->cend());
-        EV<<dropped[i]<<" ";
-        i++;
-    }
-#if LOG
-    EV<<std::endl;
-#endif
-    double avgDropped = sumDropped / double(droppedJobs.size());
-#if LOG
-    EV<<"Drop Avg "<<avgDropped<<std::endl;
-#endif
-    double kErr=par("kErr").doubleValue();
-    double kD=par("kD").doubleValue();
-    double dropSens=par("dropSens").doubleValue();
-    for(int i=0; i<nSPs; i++)
-    {
-        simtime_t Di = providerAvgLatency[i];
-        double dropComponent = (avgDropped>0)?(avgDropped-dropped[i])/avgDropped:0;
-#if LOG
-        EV<<"dropComponent "<<dropComponent;
-#endif
-        double Drel = (Dt-Di)/Dt;
-        double dRiP=(1-dropSens)*Drel + dropSens*dropComponent;
-#if LOG
-        EV<<" dRiP "<<dRiP<<std::endl;
-#endif
-        double dRi=kErr*dRiP;
-
-        static bool firstRun=true;
-        if(firstRun)
+        if(providerAvgLatency[i]>SIMTIME_ZERO && providerAvgLatency[i]<bestLatency)
         {
-            firstRun=false;
+            bestLatency=providerAvgLatency[i];
+        }
+    }
+    if(bestLatency==SIMTIME_MAX)
+    {
+        return;
+    }
+
+    std::vector<int> bestProviders;
+    std::vector<int> outlierProviders;
+    for(int i=shouldOnlyUpdateMalSPs?nHonSPs:0; i<nSPs; i++)
+    {
+        if(providerAvgLatency[i]>SIMTIME_ZERO && providerAvgLatency[i]<=bestLatency+cluster_thresh)
+        {
+            bestProviders.push_back(i);
+            //std::cout<<"BEST "<<i<<std::endl;
         }
         else
         {
-            double oldDrel=providerPrevAvgRelLatency[i];
-            double oldDropComponent = prevDroppedJobsRelAvg[i];
-            double dRiD=(1-dropSens)*(Drel-oldDrel) + dropSens*(dropComponent-oldDropComponent);
-#if LOG
-            EV<<"dRiD"<<i<<" "<<dRiD<<std::endl;
-#endif
-            dRi+=kD*dRiD;
+            outlierProviders.push_back(i);
+            //std::cout<<"OUTLIER "<<i<<std::endl;
         }
+    }
+
+    int windowSize=par("windowSize").intValue();//100;
+    simtime_t sum=SIMTIME_ZERO;
+    for (int provider:bestProviders)
+    {
+        simtime_t prov_sum=SIMTIME_ZERO;
+        if(providerLatencies[provider].size()>=windowSize)
+        {
+            prov_sum=std::accumulate(providerLatencies[provider].end()-windowSize, providerLatencies[provider].end(), SIMTIME_ZERO);
+        }
+        else
+        {
+            prov_sum=std::accumulate(providerLatencies[provider].begin(), providerLatencies[provider].end(), SIMTIME_ZERO);
+        }
+        prov_sum=prov_sum/double(std::min(windowSize,int(providerLatencies[provider].size())));
+        sum+=prov_sum;
+    }
+    simtime_t Dt=sum/double(bestProviders.size());
+
+    simtime_t dropTimeWindow=simTime()-SimTime(60);
+    std::vector<int> dropped = std::vector<int>(nSPs,0);
+    int sumDropped =0;
+    int i=0;
+    for (int provider:bestProviders)
+    {
+        auto begin = dichotomic_search(droppedJobs[provider].cbegin(),droppedJobs[provider].cend(),dropTimeWindow);
+        sumDropped+=std::distance(begin, droppedJobs[provider].cend());
+        dropped[i]=std::distance(begin, droppedJobs[provider].cend());
+        EV<<dropped[i]<<" ";
+        i++;
+    }
+    double avgDropped = sumDropped / double(bestProviders.size());
+
+    double kErr=par("kErr").doubleValue();
+    double kD=par("kD").doubleValue();
+    double dropSens=par("dropSens").doubleValue();
+    for(int i:bestProviders)
+    {
+        double dropComponent = (avgDropped>0)?(avgDropped-dropped[i])/avgDropped:0;
+
+        simtime_t Di = providerAvgLatency[i];
+        double Drel = (Dt-Di)/Dt;
+        double dRiP=(1-dropSens)*Drel + dropSens*dropComponent;
+
+        double dRi=kErr*dRiP;
+
+        double oldDrel=providerPrevAvgRelLatency[i];
+        double oldDropComponent = prevDroppedJobsRelAvg[i];
+        double dRiD=(1-dropSens)*(Drel-oldDrel) + dropSens*(dropComponent-oldDropComponent);
+
+        dRi+=kD*dRiD;
+
         providerPrevAvgRelLatency[i]=Drel;
         prevDroppedJobsRelAvg[i]=dropComponent;
 
         r3[i]=clamp(r3[i]+dRi,0.,1.);
     }
-#if LOG
-    EV<<"R3s ";
-    std::copy(r3.begin(), r3.end(), std::ostream_iterator<double>(EV, " "));
-    EV<<std::endl;
-#endif
-    double sumR3=std::accumulate(r3.begin(), r3.end(), 0.);
-#if LOG
-    EV<<"Sum R3 "<<sumR3<<std::endl;
-#endif
+
+    double sum_best_r3=0;
+    for(int i:bestProviders)
+    {
+        sum_best_r3+=r3[i];
+    }
+    double sum_outlier_r3=0;
+    for(int i:outlierProviders)
+    {
+        r3[i]*=(1-cluster_attrition);
+        sum_outlier_r3+=r3[i];
+    }
+    if(shouldOnlyUpdateMalSPs)
+    {
+        for(int i=0; i<nHonSPs;i++)
+        {
+            sum_outlier_r3+=r3[i];
+        }
+    }
+    for(int i:bestProviders)
+    {
+        r3[i]=(1-sum_outlier_r3)*r3[i]/sum_best_r3;
+    }
+
     for(int i=0; i<nSPs; i++)
     {
-        r3[i]=r3[i]/sumR3;
         providerRatios[i]=x1*(1/double(nSPs))+(1-x1)*r3[i];
         emit(providerRatioSignals[i],r3[i]);
+        //std::cout<<"RATIO "<<i<<" "<<providerRatios[i]<<std::endl;
     }
-#if LOG
-    EV<<"R3s ";
-    std::copy(r3.begin(), r3.end(), std::ostream_iterator<double>(EV, " "));
-    EV<<std::endl;
-    EV<<"Ratios ";
-    std::copy(providerRatios.begin(), providerRatios.end(), std::ostream_iterator<double>(EV, " "));
-    EV<<std::endl;
-#endif
 }

@@ -13,17 +13,16 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-#ifndef UTILS_UTILS_H_
-#define UTILS_UTILS_H_
+package cooltee;
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-
-class Utils {
-public:
-    static std::vector<std::vector<double>> csv_to_matrix(std::string input_csv, bool ignore_header=false, bool ignore_index=false);
-};
-
-#endif /* UTILS_UTILS_H_ */
+//
+// TODO auto-generated module
+//
+simple CuckooEnv extends Environment
+{
+    parameters:
+        @class(CuckooEnv);
+        double reqThroughput;
+        double mu;
+        double cuckooLoad;
+}

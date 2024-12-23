@@ -39,6 +39,9 @@ class MultiSink : public Sink
     std::vector<double> providerRatios; // x1*r1+x3*r3
     std::vector<double> r3; // eXploit
     double x1; // eXplore ratio
+    double cluster_attrition; // rate of attrition for outliers
+    simtime_t cluster_thresh; // avg-latency threshold from other providers vs best provider, under which to cluster them and then use PD-Ctrl rate tuning
+
     int updateRatiosCount;
     std::vector<std::vector<simtime_t>> droppedJobs;
     std::vector<double> droppedJobsAvg;
