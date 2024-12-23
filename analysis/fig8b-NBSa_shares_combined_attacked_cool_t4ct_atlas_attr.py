@@ -3,7 +3,7 @@
 
 # In[ ]:
 
-from figA_config_attacked_cool_t4ct_atlas_attr import *
+from analysis.fig8b_config_attacked_cool_t4ct_atlas_attr import *
 
 # In[ ]:
 

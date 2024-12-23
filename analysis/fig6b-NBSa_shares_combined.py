@@ -3,7 +3,7 @@
 
 # In[ ]:
 
-from fig7_config import *
+from analysis.fig6b_config import *
 
 # In[ ]:
 
