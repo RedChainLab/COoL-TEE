@@ -18,7 +18,9 @@ Simulation experiment data generation is divided in two steps:
 - the search mechanism simulation (left side of fig.4 in the paper), simulated with Omnet++;
 - whose results are then joined with market events simulation (right side of fig. 4), simulated in Python.
 
-Deployed experiments have their own pipeline described in a separate [Readme.md](deployed/README.md).
+Deployed experiments have their own pipeline described in separate Readme files:
+- [deployed/Readme.md](deployed/README.md) for runs without Trusted Time (Figures 5a, 6*, and 7*);
+- [COoL-Triad/Readme.md](COoL-Triad/README.md) for those with Trusted Time (Figures 5b and 8*).
 
 ### I. Search mechanism simulation
 
@@ -80,6 +82,8 @@ Similarly to before, the configurations without TEEs can be run by uncommenting 
         f"+{TIME_OFFSET}s"
     ]
 ```
+
+This script accepts an argument specifying the number of parallel executions, i.e., `python race_winners.py <n-jobs>`.
 
 #### C. Obtained results
 
